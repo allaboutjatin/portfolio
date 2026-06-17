@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jatin Kumar Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--card:#f3f3f3;--border:#dddddd;--text:#111;--muted:#666}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,sans-serif;color:var(--text);position:relative;background:#fff}
+a{text-decoration:none;color:inherit}
+body:before{content:"";position:fixed;inset:0;background:url('images/paper-texture.jpg') center/cover no-repeat;opacity:.12;z-index:-2}
+body:after{content:"";position:fixed;inset:0;background:rgba(255,255,255,.84);z-index:-1}
+section{padding:90px 8%}
+section:nth-of-type(even){background:#fafafa}
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.25);
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.modal.active{
+display:flex;
+}
+
+.modal-content{
+background:white;
+padding:32px;
+border-radius:24px;
+max-width:500px;
+width:90%;
+border:1px solid #ddd;
+}
+
+.contact-info{
+margin-top:20px;
+color:#666;
+line-height:1.8;
+}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center}
+h1{font-family:Syne,sans-serif;font-size:clamp(4rem,9vw,8rem);letter-spacing:-.06em}
+.title{font-family:Syne,sans-serif;font-size:clamp(2.2rem,5vw,4rem)}
+.label{font-size:.8rem;color:#888;letter-spacing:.25em;text-transform:uppercase}
+.badge,.pill,.btn{
+border-radius:999px;padding:12px 20px;
+background:rgba(255,255,255,.55);
+backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.85);
+box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.pills,.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.pills{margin:24px 0}
+.subtitle{max-width:760px;margin:24px auto;color:var(--muted)}
+.card,.stat,.project{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:24px;transition:.35s}
+.card:hover,.stat:hover{transform:scale(1.03)}
+.project:hover{transform:scale(1.015)}
+.pill:hover,.btn:hover{transform:scale(1.04)}
+.stats,.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.software{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+.software .card{text-align:center}
+.software img{height:42px;margin-bottom:10px}
+.thumb{display:block;aspect-ratio:16/9;overflow:hidden;border-radius:16px}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.project{max-width:950px;margin:0 auto 24px}
+footer{text-align:center;padding:80px 8%;background:#fafafa;border-top:1px solid #e8e8e8}
+@media(max-width:900px){.software{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<section class="hero"><div>
+<div class="badge">Available for Freelance Projects & Full-Time Roles</div>
+<h1>JATIN KUMAR</h1>
+<div class="pills">
+<div class="pill">Technical Creative Producer</div>
+<div class="pill">Real-Time 3D Artist</div>
+<div class="pill">Multimedia Production Lead</div>
+<div class="pill">Broadcast Media Professional</div>
+</div>
+<p class="subtitle">From broadcast media to real-time 3D, I build <br> visual experiences that blend creative storytelling with production expertise.</p>
+<div class="actions">
+<button
+class="btn"
+onclick="openModal()">
+Let's Talk
+</button><a class="btn"
+href="https://www.artstation.com/allaboutjatin"
+target="_blank">
+ArtStation
+</a><a class="btn"
+href="https://www.linkedin.com/in/allaboutjatin"
+target="_blank">
+LinkedIn
+</a>
+</div></div></section>
+
+
+
+<section><div class="label">Services</div><h2 class="title">What I Can Do</h2>
+<div class="cards">
+<div class="card">3D Animation & Cinematics</div><div class="card">Video Production & Editing</div>
+<div class="card">Podcast Production</div><div class="card">Photography & Videography</div>
+<div class="card">Livestream Production</div><div class="card">Content & Social Media Management</div>
+<div class="card">Creative Team Leadership</div><div class="card">Technical Troubleshooting & Workflow Support</div>
+</div></section>
+
+<section><div class="label">Experience</div><h2 class="title">Professional Highlights</h2>
+<div class="cards">
+<div class="card">4+ years of professional production experience.</div>
+<div class="card">Worked on national-level events attended by senior dignitaries and the former President of India.</div>
+<div class="card">Collaborated with broadcast media teams, news anchors and production professionals.</div>
+<div class="card">Produced podcasts, livestreams and social media content.</div>
+<div class="card">Hands-on Unreal Engine, animation and cinematic production experience.</div>
+<div class="card">End-to-end production understanding from planning to final delivery.</div>
+</div></section>
+
+<section><div class="label">Worked With</div><h2 class="title">Network</h2>
+<div class="cards">
+<div class="card">High-Growth Digital Media Channels<br><br>600K+ YouTube Audience<br>300K+ Instagram Community</div>
+<div class="card">Various News Channel Teams</div>
+<div class="card">Various News Anchors</div>
+<div class="card">Digital Media Creators</div>
+</div></section>
+
+<section><div class="label">Academic Background</div><h2 class="title">Education</h2>
+<div class="cards">
+<div class="card"><b>Bachelor's of Animation & VFX</b><br>MUIT, Noida<br>2023–2026<br>✦ Graduated May 2026</div>
+<div class="card"><b>Bachelor of Computer Applications (BCA)</b><br>IGNOU<br><span style="color:#c96a6a">✦ Drop-out</span></div>
+<div class="card"><b>Senior Secondary Education</b><br>Police Modern Senior Secondary School<br>2019 – 2021<br>Completed 2021</div>
+</div></section>
+
+<section><div class="label">Tools</div><h2 class="title">Tools & Software</h2>
+<div class="software">
+<div class="card"><img src="icons/photoshop.svg"><div>Photoshop</div></div>
+<div class="card"><img src="icons/premiere.svg"><div>Premiere</div></div>
+<div class="card"><img src="icons/after-effects.svg"><div>After Effects</div></div>
+<div class="card"><img src="icons/unreal.svg"><div>Unreal Engine</div></div>
+<div class="card"><img src="icons/maya.svg"><div>Maya</div></div>
+<div class="card"><img src="icons/3ds-max.svg"><div>3ds Max</div></div>
+<div class="card"><img src="icons/houdini.svg"><div>Houdini</div></div>
+<div class="card"><img src="icons/nuke.svg"><div>Nuke</div></div>
+<div class="card"><img src="icons/embergen.svg"><div>EmberGen</div></div>
+<div class="card"><img src="icons/substance-painter.svg"><div>Substance Painter</div></div>
+</div></section>
+
+<section><div class="label">Featured Work</div><h2 class="title">Project Redline</h2>
+<div class="project"><a class="thumb"
+href="https://youtu.be/FTV57q6M0j4"
+target="_blank"><img src="images/project-redline.png"></a></div>
+<div class="project"><h3>Breakdown</h3><a class="thumb"
+href="https://youtu.be/T4Y2TXVtlW4"
+target="_blank"><img src="images/project-redline-breakdown.png"></a></div>
+</section>
+
+<section><div class="label">Selected Work</div><h2 class="title">Projects</h2>
+<div class="project"><h3>Bharat Petroleum (Commercial Project)</h3><a class="thumb"
+href="https://youtu.be/00igeeAFZYU"
+target="_blank"><img src="images/bpcl.png"></a></div>
+<div class="project"><h3>The Lost Castle</h3><a class="thumb"
+href="https://youtu.be/3OX753L0sIg"
+target="_blank">
+<img src="images/lost-castle.png"></a></div>
+<div class="project"><h3>Beach Environment</h3><a class="thumb"
+href="https://youtu.be/mwZ8coCUlPI"
+target="_blank"><img src="images/beach.png"></a></div>
+</section>
+
+<footer>
+<h2 class="title">Let's Work Together</h2>
+<p>Available for Animation, Editing, Podcast Production, Social Media Management, Production Consulting and Technical Support.</p>
+</footer>
+<div id="contactModal" class="modal">
+  <div class="modal-content">
+
+    <h3>Let's Work Together</h3>
+
+    <p>
+      Have a project, collaboration opportunity,
+      consulting requirement, or role?
+    </p>
+
+    <div class="actions">
+
+      <a class="btn"
+      href="mailto:k.jatinofficial@gmail.com">
+      Email Me
+      </a>
+
+      <a class="btn"
+      href="tel:+918130114525">
+      Call Me
+      </a>
+
+    </div>
+
+    <div class="contact-info">
+
+      <p>
+      <strong>Email:</strong>
+      k.jatinofficial@gmail.com
+      </p>
+
+      <p>
+      <strong>Phone:</strong>
+      +91 81301 14525
+      </p>
+
+    </div>
+
+  </div>
+</div>
+<script>
+
+function openModal(){
+document
+.getElementById("contactModal")
+.classList.add("active");
+}
+
+window.onclick=function(e){
+
+if(
+e.target==
+document.getElementById("contactModal")
+){
+
+document
+.getElementById("contactModal")
+.classList.remove("active");
+
+}
+
+}
+
+</script>
+</body></html>

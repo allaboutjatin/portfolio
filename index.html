@@ -8,7 +8,13 @@
 <style>
 :root{--card:#f3f3f3;--border:#dddddd;--text:#111;--muted:#666}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,sans-serif;color:var(--text);position:relative;background:#fff}
+body{
+font-family:Inter,sans-serif;
+color:var(--text);
+position:relative;
+background:#fff;
+overflow-x:hidden;
+}
 a{text-decoration:none;color:inherit}
 body:before{content:"";position:fixed;inset:0;background:url('images/paper-texture.jpg') center/cover no-repeat;opacity:.12;z-index:-2}
 body:after{content:"";position:fixed;inset:0;background:rgba(255,255,255,.84);z-index:-1}
@@ -74,6 +80,13 @@ box-shadow:0 8px 24px rgba(0,0,0,.05)}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .project{max-width:950px;margin:0 auto 24px}
 footer{padding:80px 8%;background:#fafafa;border-top:1px solid #e8e8e8}
+
+.hero,
+section,
+footer{
+position:relative;
+z-index:1;
+}
 .small{color:#666}
 @media (max-width:768px){
 
@@ -135,7 +148,11 @@ margin-bottom:24px;
 }
 
 }
+
+.cursor-glow{
+
 position:fixed;
+
 width:500px;
 height:500px;
 
@@ -154,10 +171,11 @@ pointer-events:none;
 transform:
 translate(-50%,-50%);
 
-z-index:-1;
+z-index:0;
 
 transition:
 transform .1s linear;
+
 }
 </style>
 </head>

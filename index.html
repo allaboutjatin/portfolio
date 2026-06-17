@@ -121,9 +121,35 @@ padding:24px;
 }
 
 }
+.cursor-glow{
+position:fixed;
+width:500px;
+height:500px;
+
+border-radius:50%;
+
+background:
+radial-gradient(
+circle,
+rgba(120,120,120,.08) 0%,
+rgba(0,0,0,.03) 35%,
+rgba(0,0,0,0) 70%
+);
+
+pointer-events:none;
+
+transform:
+translate(-50%,-50%);
+
+z-index:-1;
+
+transition:
+transform .08s linear;
+}
 </style>
 </head>
 <body>
+  <div class="cursor-glow"></div>
 <section class="hero"><div>
 <div class="badge">Available for Freelance Projects & Full-Time Roles</div>
 <h1>JATIN KUMAR</h1>
@@ -191,7 +217,7 @@ LinkedIn
 <div class="card"><img src="icons/photoshop.svg"><div>Photoshop</div></div>
 <div class="card"><img src="icons/premiere.svg"><div>Premiere</div></div>
 <div class="card"><img src="icons/after-effects.svg"><div>After Effects</div></div>
-<div class="card"><img src="icons/unreal.svg"><div>Unreal Engine 5</div></div>
+<div class="card"><img src="icons/unreal.svg"><div>Unreal Engine</div></div>
 <div class="card"><img src="icons/maya.svg"><div>Maya</div></div>
 <div class="card"><img src="icons/3ds-max.svg"><div>3ds Max</div></div>
 <div class="card"><img src="icons/houdini.svg"><div>Houdini</div></div>
@@ -290,6 +316,25 @@ document
 }
 
 }
+
+</script>
+<script>
+
+const glow =
+document.querySelector(".cursor-glow");
+
+document.addEventListener(
+"mousemove",
+(e)=>{
+
+glow.style.left =
+e.clientX + "px";
+
+glow.style.top =
+e.clientY + "px";
+
+}
+);
 
 </script>
 </body></html>

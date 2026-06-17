@@ -69,6 +69,58 @@ box-shadow:0 8px 24px rgba(0,0,0,.05)}
 .project{max-width:950px;margin:0 auto 24px}
 footer{padding:80px 8%;background:#fafafa;border-top:1px solid #e8e8e8}
 .small{color:#666}
+@media (max-width:768px){
+
+section{
+padding:60px 24px;
+}
+
+h1{
+font-size:clamp(3rem,12vw,5rem);
+line-height:.95;
+}
+
+.pills{
+flex-direction:column;
+align-items:center;
+}
+
+.pill{
+width:100%;
+max-width:320px;
+text-align:center;
+}
+
+.actions{
+flex-direction:column;
+align-items:center;
+}
+
+.actions .btn,
+.actions button{
+width:100%;
+max-width:320px;
+text-align:center;
+}
+
+.software{
+grid-template-columns:repeat(2,1fr);
+}
+
+.cards{
+grid-template-columns:1fr;
+}
+
+.project{
+margin-bottom:40px;
+}
+
+.modal-content{
+width:95%;
+padding:24px;
+}
+
+}
 </style>
 </head>
 <body>

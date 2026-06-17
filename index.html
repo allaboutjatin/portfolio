@@ -18,7 +18,9 @@ overflow-x:hidden;
 a{text-decoration:none;color:inherit}
 body:before{content:"";position:fixed;inset:0;background:url('images/paper-texture.jpg') center/cover no-repeat;opacity:.12;z-index:-2}
 body:after{content:"";position:fixed;inset:0;background:rgba(255,255,255,.84);z-index:-1}
-section{padding:90px 8%}
+section{
+padding:110px 8%;
+}
 section:nth-of-type(even){background:#fafafa}
 .modal{
 display:none;
@@ -53,9 +55,16 @@ h1{font-family:Syne,sans-serif;font-size:clamp(4rem,9vw,8rem);letter-spacing:-.0
 .title{
 font-family:Syne,sans-serif;
 font-size:clamp(2.2rem,5vw,4rem);
-line-height:1.25;
-padding-bottom:12px;
-margin-bottom:18px;
+line-height:1.4;
+padding-bottom:20px;
+margin-bottom:20px;
+overflow:visible;
+}
+.section-title{
+display:block;
+overflow:visible;
+padding-top:8px;
+padding-bottom:32px;
 }
 .label{font-size:.8rem;color:#888;letter-spacing:.25em;text-transform:uppercase}
 .badge,.pill,.btn{
@@ -80,11 +89,6 @@ box-shadow:0 8px 24px rgba(0,0,0,.05)}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .project{max-width:950px;margin:0 auto 24px}
 footer{padding:80px 8%;background:#fafafa;border-top:1px solid #e8e8e8}
-.footer-actions{
-margin-top:24px;
-display:flex;
-justify-content:flex-start;
-}
 .footer-actions{
 margin-top:24px;
 display:flex;
@@ -167,15 +171,15 @@ margin-bottom:24px;
 
 position:fixed;
 
-width:500px;
-height:500px;
+width:600px;
+height:600px;
 
 border-radius:50%;
 
 background:
 radial-gradient(
 circle,
-rgba(120,120,120,.08) 0%,
+rgba(120,120,120,.15) 0%,
 rgba(0,0,0,.03) 35%,
 rgba(0,0,0,0) 70%
 );
@@ -231,7 +235,7 @@ LinkedIn
 <div class="card">Creative Team Leadership</div><div class="card">Technical Troubleshooting & Workflow Support</div>
 </div></section>
 
-<section><div class="label">Experience</div><h2 class="title">Professional Highlights</h2>
+<section><div class="label">Experience</div><h2 class="title section-title">Professional Highlights</h2>
 <div class="cards">
 <div class="card">4+ years of professional production experience.</div>
 <div class="card">Worked on national-level events attended by senior dignitaries like Governors of States, Deputy CMs and the former President of India.</div>
@@ -243,11 +247,11 @@ LinkedIn
 
 <section><div class="label">Worked With</div><h2 class="title">Network</h2>
 <div class="cards">
-<div class="card">Various News Anchors and Celebrities like Ashutosh Rana, Manoj Joshi, Aalok Shrivastav, Ashmita Singh rajput, Shalini kapoor Tiwari, Rana Yashwant and many more...</div>
+<div class="card">High-Growth Digital Media Channels<br><br>600K+ YouTube Audience<br>300K+ Instagram Community</div>
 <div class="card">Various News Channel Teams including Zee News, Bharat Express, News Nation, Doordarshan etc. </div>
 <div class="card"> Partnered with the Ministry of Social Justice and Empowerment for a large-scale event held at Rashtrapati Bhavan's Amrit Udyan, contributing to the successful execution and coverage of an event attended by over 11,550 visitors.
  </div>
-<div class="card"> High-Growth Digital Media Channels<br><br>600K+ YouTube Audience<br>300K+ Instagram Community </div>
+<div class="card">Various News Anchors and Celebrities like Ashutosh Rana, Manoj Joshi, Aalok Shrivastav, Ashmita Singh rajput, Shalini kapoor Tiwari, Rana Yashwant and many more... </div>
 </div></section>
 
 <section><div class="label">Academic Background</div><h2 class="title">Education</h2>
@@ -271,7 +275,7 @@ LinkedIn
 <div class="card"><img src="icons/substance-painter.svg"><div>Substance Painter</div></div>
 </div></section>
 
-<section><div class="label">Featured Work</div><h2 class="title">Project Redline</h2>
+<section><div class="label">Featured Work</div><h2 class="title section-title">Project Redline</h2>
 <div class="project"><a class="thumb"
 href="https://youtu.be/FTV57q6M0j4"
 target="_blank"><img src="images/project-redline.png"></a></div>
@@ -280,7 +284,7 @@ href="https://youtu.be/T4Y2TXVtlW4"
 target="_blank"><img src="images/project-redline-breakdown.png"></a></div>
 </section>
 
-<section><div class="label">Selected Work</div><h2 class="title">Projects</h2>
+<section><div class="label">Selected Work</div><h2 class="title section-title">Projects</h2>
 <div class="project"><h3>Bharat Petroleum (Commercial Project)</h3><a class="thumb"
 href="https://youtu.be/00igeeAFZYU"
 target="_blank"><img src="images/bpcl.png"></a></div>
@@ -295,7 +299,7 @@ target="_blank"><img src="images/beach.png"></a></div>
 
 <footer>
 
-<h2 class="title">Let's Work Together</h2>
+<h2 class="title section-title">Let's Work Together</h2>
 
 <p>
 Available for Animation, Editing, Podcast Production,

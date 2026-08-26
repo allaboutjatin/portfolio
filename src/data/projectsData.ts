@@ -498,11 +498,12 @@ export const SOFTWARE_SKILLS: SoftwareSkill[] = [
 
 export const ARTIST_BIO = {
   name: 'Jatin Kumar',
-  title: 'Real-Time 3D Artist • Technical Creative Producer • Multimedia Lead',
+  title: '3D Artist • Creative Technologist • Real-Time Technical Director',
   tagline: 'Unreal Engine 5, Houdini & Real-Time Cinematic Workflows',
-  status: 'Open to full-time and freelance opportunities',
+  status: 'Open to full-time & freelance opportunities',
   email: 'k.jatinofficial@gmail.com',
   location: 'Noida, India',
+  artstation: 'https://www.artstation.com/allaboutjatin',
   degree: '3D Animation, VFX and CGI',
   gradYear: 'Production Ready',
   awards: [
@@ -510,13 +511,28 @@ export const ARTIST_BIO = {
     'Production Lead for Studios with 1.5M+ Digital Audience & Subscribers',
     'Coverage of National-Level Events & Renowned Public Figures'
   ],
-  bioText: `I'm a 3D Artist with a primary focus on Unreal Engine 5, Houdini, and real-time cinematic workflows. I enjoy building environments, creating cinematic experiences, developing procedural assets, and exploring VFX and technical workflows for interactive and cinematic projects.
+  bioText: `Hi, I’m Jatin 👋
 
-Before moving into 3D, I spent over 4+ years in media production, working across live events, photography, videography, podcast production, editing, and live streaming. During this time, I contributed to the production and coverage of national-level events, collaborating with teams from leading news networks, including News Nation, Zee News, Doordarshan, and other media organizations. I also worked alongside well-known news anchors and covered events attended by distinguished guests such as the former President of India, State Governors, Chief Ministers, Deputy Chief Ministers, and several renowned public figures and Bollywood personalities.
+a 3D Artist, creative technologist, and that multitalented guy in your organisation who somehow ends up knowing a little bit of everything.
 
-I'm also part of a production studio with a combined audience of over 1.5 million followers and subscribers across multiple digital platforms, where I gained hands-on experience in production workflows, working under tight deadlines, and collaborating with creative and technical teams.
+My main focus is Unreal Engine 5, Houdini, and real-time cinematic workflows 🎬✨. I enjoy building environments, creating cinematic experiences, developing procedural assets, and exploring VFX and technical workflows for interactive and cinematic projects.
 
-Outside of 3D, I'm also comfortable with video post & pre-production, PC hardware and software troubleshooting, and have basic knowledge with web development. While these aren't my primary focus, they've helped me become a more versatile creative professional.
+Before moving into 3D, I spent 4+ years in media production, working across live events, photography, videography, editing, podcast production, and live streaming. I’ve had the opportunity to work with teams from News Nation, Zee News, Doordarshan, and other media organisations, while also working alongside news anchors and production professionals.
 
-Currently looking for opportunities where I can continue growing as a Real-Time 3D Artist, contribute to meaningful projects, and keep learning from experienced teams.`
+I’ve contributed to the production and coverage of national-level events attended by distinguished guests, including the former President of India, State Governors, Chief Ministers, Deputy Chief Ministers, Bollywood personalities, and other public figures.
+
+I’m also part of a production studio with a combined audience of 1.5M+ followers and subscribers across multiple digital platforms. Working in that environment taught me how to handle tight deadlines, adapt quickly, collaborate across creative and technical teams, and ----- most importantly ----- figure things out when there isn’t a manual.
+
+Outside of 3D, I’m comfortable with video production & post-production, PC hardware and software troubleshooting, and basic web development. They may not all be my primary specialisations, but having a broad technical and creative skill set has definitely made me a more versatile problem-solver.
+
+For anything else feel free to drop me a DM or get in touch with me directly at k.jatinofficial@gmail.com 💌
+
+🎯 Currently looking for:
+Opportunities in Real-Time 3D, Unreal Engine, VFX, and cinematic production where I can contribute creatively, solve technical problems, learn from experienced artists, and hopefully become the multitalented guy you’re glad you hired. 🚀
+
+📍 Noida, India
+💼 Open to full-time & freelance opportunities
+🎨 ArtStation: https://www.artstation.com/allaboutjatin
+
+If you’re working in Unreal Engine, Houdini, VFX, real-time graphics, or cinematic production, let’s connect! 🤝`
 };

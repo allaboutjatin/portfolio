@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface BackgroundVfxCanvasProps {
   showParticles?: boolean;
@@ -96,9 +96,6 @@ export const BackgroundVfxCanvas: React.FC<BackgroundVfxCanvasProps> = ({
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Film grain layer */}
-      <div className="grain-overlay" />
-      
       {/* Background Canvas Particles */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60" />
     </div>

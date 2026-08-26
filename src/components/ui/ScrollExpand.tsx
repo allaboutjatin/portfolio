@@ -10,7 +10,8 @@ const smoothstep = (edge0: number, edge1: number, x: number) => {
 
 export interface ScrollExpandProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string;
-  mediaType?: 'image' | 'video';
+  mediaType?: 'image' | 'video' | 'custom';
+  customMedia?: ReactNode;
   poster?: string;
   alt?: string;
   title?: ReactNode;
@@ -26,6 +27,7 @@ export interface ScrollExpandProps extends React.HTMLAttributes<HTMLDivElement> 
   overlayScrim?: number;
   useWindowScroll?: boolean;
   enabled?: boolean;
+  enableIntroAnimation?: boolean;
   children?: ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -34,6 +36,7 @@ export interface ScrollExpandProps extends React.HTMLAttributes<HTMLDivElement> 
 export const ScrollExpand: React.FC<ScrollExpandProps> = ({
   src = '',
   mediaType = 'image',
+  customMedia,
   poster = '',
   alt = '',
   title = '',
@@ -49,6 +52,7 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
   overlayScrim = 0.45,
   useWindowScroll = false,
   enabled = true,
+  enableIntroAnimation = true,
   children,
   className = '',
   style,
@@ -63,6 +67,7 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const scrimRef = useRef<HTMLDivElement | null>(null);
   const hintRef = useRef<HTMLDivElement | null>(null);
+  const introProgressRef = useRef<number>(enableIntroAnimation ? 0 : 1);
 
   const propsRef = useRef({
     startWidth,
@@ -75,7 +80,8 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
     smoothing,
     overlayScrim,
     useWindowScroll,
-    enabled
+    enabled,
+    enableIntroAnimation
   });
 
   propsRef.current = {
@@ -89,7 +95,8 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
     smoothing,
     overlayScrim,
     useWindowScroll,
-    enabled
+    enabled,
+    enableIntroAnimation
   };
 
   const applyProgress = useCallback((p: number) => {
@@ -97,32 +104,46 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
     const media = mediaRef.current;
     if (!frame || !media) return;
     const c = propsRef.current;
+    const intro = introProgressRef.current;
 
     const e = smoothstep(0, 1, p);
 
-    const w = c.startWidth + (100 - c.startWidth) * e;
-    const h = c.startHeight + (100 - c.startHeight) * e;
+    // Dynamic start size scaled smoothly during mount intro
+    const initialWidth = c.startWidth * (0.4 + 0.6 * intro);
+    const initialHeight = c.startHeight * (0.4 + 0.6 * intro);
+    const initialRadius = c.startRadius * (1.3 - 0.3 * intro);
+
+    const w = initialWidth + (100 - initialWidth) * e;
+    const h = initialHeight + (100 - initialHeight) * e;
     const ix = Math.max(0, (100 - w) / 2);
     const iy = Math.max(0, (100 - h) / 2);
-    const r = c.startRadius + (c.endRadius - c.startRadius) * e;
+    const r = initialRadius + (c.endRadius - initialRadius) * e;
     frame.style.clipPath = `inset(${iy}% ${ix}% ${iy}% ${ix}% round ${r}px)`;
 
-    media.style.transform = `scale(${c.mediaZoom + (1 - c.mediaZoom) * e})`;
+    const baseZoom = c.mediaZoom * (1.15 - 0.15 * intro);
+    media.style.transform = `scale(${baseZoom + (1 - baseZoom) * e})`;
 
     if (scrimRef.current) scrimRef.current.style.opacity = `${c.overlayScrim * e}`;
 
     if (titleRef.current) {
       const out = smoothstep(0.4, 0.88, p);
-      titleRef.current.style.opacity = `${1 - out}`;
-      titleRef.current.style.transform = `translate3d(0, ${-28 * out}px, 0) scale(${1 + 0.06 * out})`;
-      titleRef.current.style.pointerEvents = out > 0.6 ? 'none' : 'auto';
+      const titleIntro = intro;
+      const titleOpacity = (1 - out) * titleIntro;
+      const titleY = -28 * out + (1 - titleIntro) * 14;
+      const titleScale = (1 + 0.06 * out) * (0.92 + 0.08 * titleIntro);
+      titleRef.current.style.opacity = `${titleOpacity}`;
+      titleRef.current.style.transform = `translate3d(0, ${titleY}px, 0) scale(${titleScale})`;
+      titleRef.current.style.filter = titleIntro < 0.99 ? `blur(${(1 - titleIntro) * 10}px)` : 'none';
+      titleRef.current.style.pointerEvents = out > 0.6 || titleIntro < 0.5 ? 'none' : 'auto';
     }
 
     if (hintRef.current) {
       const gone = smoothstep(0, 0.12, p);
-      hintRef.current.style.opacity = `${1 - gone}`;
-      hintRef.current.style.transform = `translate3d(0, ${8 * gone}px, 0)`;
-      hintRef.current.style.pointerEvents = gone > 0.5 ? 'none' : 'auto';
+      const hintIntro = Math.max(0, (intro - 0.4) / 0.6);
+      hintRef.current.style.opacity = `${(1 - gone) * hintIntro}`;
+      hintRef.current.style.transform = `translate3d(0, ${8 * gone + (1 - hintIntro) * 10}px, 0)`;
+      hintRef.current.style.filter = hintIntro < 0.99 ? `blur(${(1 - hintIntro) * 6}px)` : 'none';
+      hintRef.current.style.pointerEvents = gone > 0.5 || hintIntro < 0.5 ? 'none' : 'auto';
     }
 
     if (overlayRef.current) {
@@ -215,8 +236,38 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
     const ro = new ResizeObserver(onResize);
     ro.observe(root);
 
+    // Smooth intro scale up and blur reveal animation on mount
+    let introStartTime: number | null = null;
+    let introRaf = 0;
+    const introDuration = 1400; // ms
+
+    if (propsRef.current.enableIntroAnimation && !reduceMotion) {
+      introProgressRef.current = 0;
+      const stepIntro = (time: number) => {
+        if (introStartTime === null) introStartTime = time;
+        const elapsed = time - introStartTime;
+        const progress = Math.min(1, elapsed / introDuration);
+        // Silky smooth cubic bezier ease-out
+        const eased = 1 - Math.pow(1 - progress, 3);
+        introProgressRef.current = eased;
+        applyProgress(current);
+
+        if (progress < 1) {
+          introRaf = requestAnimationFrame(stepIntro);
+        } else {
+          introProgressRef.current = 1;
+          applyProgress(current);
+        }
+      };
+      introRaf = requestAnimationFrame(stepIntro);
+    } else {
+      introProgressRef.current = 1;
+      applyProgress(current);
+    }
+
     return () => {
       if (raf) cancelAnimationFrame(raf);
+      if (introRaf) cancelAnimationFrame(introRaf);
       scroller.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       ro.disconnect();
@@ -224,7 +275,14 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
   }, [applyProgress, useWindowScroll]);
 
   const media =
-    mediaType === 'video' ? (
+    mediaType === 'custom' ? (
+      <div
+        ref={mediaRef as React.RefObject<HTMLDivElement>}
+        className="scroll-expand__media w-full h-full overflow-hidden bg-black"
+      >
+        {customMedia}
+      </div>
+    ) : mediaType === 'video' ? (
       <video
         ref={mediaRef as React.RefObject<HTMLVideoElement>}
         className="scroll-expand__media"

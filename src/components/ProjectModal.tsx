@@ -30,43 +30,43 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
       <div className="bg-[#0b0b0e] w-full max-w-5xl rounded-3xl border border-white/15 overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
         
         {/* Top Header Bar */}
-        <div className="px-6 py-4 bg-[#111115] border-b border-white/10 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-white">
-              <Film className="w-4 h-4" />
+        <div className="px-4 py-3 sm:px-6 sm:py-4 bg-[#111115] border-b border-white/10 flex items-center justify-between">
+          <div className="flex items-center space-x-2.5 sm:space-x-3 overflow-hidden">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-white shrink-0">
+              <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h3 className="font-display font-semibold text-lg text-white">
+            <div className="overflow-hidden">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h3 className="font-display font-semibold text-sm sm:text-lg text-white truncate">
                   {project.title.split(' ')[0]}{' '}
                   <em className="font-serif-italic font-normal text-[#9a9a9a] not-italic text-[1.05em]">
                     {project.title.split(' ').slice(1).join(' ')}
                   </em>
                 </h3>
-                <span className="px-2.5 py-0.5 text-[10px] font-mono-code bg-white/10 text-white border border-white/15 rounded-full font-semibold">
+                <span className="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-mono-code bg-white/10 text-white border border-white/15 rounded-full font-semibold">
                   {project.categoryLabel}
                 </span>
                 {project.isComingSoon ? (
-                  <span className="px-2.5 py-0.5 text-[10px] font-mono-code bg-amber-400 text-black font-bold rounded-md">
+                  <span className="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-mono-code bg-amber-400 text-black font-bold rounded-md">
                     COMING SOON
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 text-[10px] font-mono-code bg-white/5 text-slate-400 rounded-md">
+                  <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-mono-code bg-white/5 text-slate-400 rounded-md">
                     {project.year}
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400 font-mono-code mt-0.5">{project.subtitle || project.clientOrContext}</p>
+              <p className="text-[10px] sm:text-xs text-slate-400 font-mono-code mt-0.5 truncate">{project.subtitle || project.clientOrContext}</p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 shrink-0">
             {project.youtubeUrl && (
               <a
                 href={project.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-mono-code transition-colors"
+                className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-mono-code transition-colors min-h-[36px]"
               >
                 <span>Watch on YouTube</span>
                 <ExternalLink className="w-3 h-3 text-sky-400" />
@@ -79,15 +79,16 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                 soundFx.playClick();
                 onClose();
               }}
-              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white border border-white/15 transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white border border-white/15 transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+              aria-label="Close Project Modal"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="overflow-y-auto p-5 sm:p-7 space-y-6">
+        <div className="overflow-y-auto p-4 sm:p-7 space-y-4 sm:space-y-6">
           
           {/* Main Visual Showcase (Cinematic Video / BTS Breakdown) */}
           <div className="space-y-3">

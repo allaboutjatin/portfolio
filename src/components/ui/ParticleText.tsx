@@ -79,14 +79,14 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
   density = 3.5,
   color = '#ffffff',
   highlightColor = '#ffffff',
-  scatter = 0,
-  gatherDuration = 0,
+  scatter = 40,
+  gatherDuration = 1.4,
   stagger = 0,
   pointerRepel = 45,
   repelRadius = 130,
   idleDrift = 0.5,
-  enableGather = false,
-  trigger = 'none',
+  enableGather = true,
+  trigger = 'mount',
   fontSize = 'clamp(2.5rem, 7vw, 5.5rem)',
   fontWeight = 700,
   fontFamily = 'inherit',
@@ -110,12 +110,15 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     interface Particle {
       x: number;
       y: number;
+      startX: number;
+      startY: number;
       targetX: number;
       targetY: number;
       size: number;
       color: string;
       seed: number;
       depth: number;
+      alpha: number;
     }
 
     let particles: Particle[] = [];
@@ -126,6 +129,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     let width = 0;
     let height = 0;
     let dpr = 1;
+    let startTime: number | null = null;
 
     const pointer = {
       active: false,
@@ -135,25 +139,37 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       smoothY: 0
     };
 
-    const drawParticle = (particle: Particle) => {
+    const drawParticle = (particle: Particle, globalAlpha: number = 1) => {
       const size = particle.size;
+      const effectiveAlpha = particle.alpha * globalAlpha;
+      if (effectiveAlpha <= 0.01) return;
+
       ctx.fillStyle = particle.color;
+      ctx.globalAlpha = effectiveAlpha;
 
       if (size <= 2.1) {
         ctx.fillRect(particle.x - size / 2, particle.y - size / 2, size, size);
+        ctx.globalAlpha = 1;
         return;
       }
 
       ctx.beginPath();
       ctx.arc(particle.x, particle.y, size / 2, 0, Math.PI * 2);
       ctx.fill();
+      ctx.globalAlpha = 1;
     };
 
     const render = (now: number) => {
+      if (startTime === null) startTime = now;
+      const elapsed = (now - startTime) / 1000;
+      const introProgress = gatherDuration > 0 ? Math.min(1, elapsed / gatherDuration) : 1;
+      // Smooth cubic easing for particle intro assemble
+      const easeIntro = 1 - Math.pow(1 - introProgress, 3);
+
       ctx.clearRect(0, 0, width, height);
 
       if (glow && !reducedMotion) {
-        ctx.shadowBlur = particleSize * 2.8;
+        ctx.shadowBlur = particleSize * 2.8 * easeIntro;
         ctx.shadowColor = highlightColor;
       } else {
         ctx.shadowBlur = 0;
@@ -163,16 +179,25 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       pointer.smoothY += (pointer.y - pointer.smoothY) * 0.2;
 
       particles.forEach(particle => {
-        let baseX = particle.targetX;
-        let baseY = particle.targetY;
+        let currentTargetX = particle.targetX;
+        let currentTargetY = particle.targetY;
 
-        if (!reducedMotion && idleDrift > 0) {
-          const driftTime = now * 0.0012;
-          baseX += Math.sin(driftTime * 0.8 + particle.seed * 8) * idleDrift * particle.depth;
-          baseY += Math.cos(driftTime * 0.65 + particle.depth * 8) * idleDrift * particle.depth;
+        if (enableGather && introProgress < 1) {
+          currentTargetX = particle.startX + (particle.targetX - particle.startX) * easeIntro;
+          currentTargetY = particle.startY + (particle.targetY - particle.startY) * easeIntro;
         }
 
-        if (pointer.active && !reducedMotion && pointerRepel > 0 && repelRadius > 0) {
+        let baseX = currentTargetX;
+        let baseY = currentTargetY;
+
+        if (!reducedMotion && idleDrift > 0 && introProgress > 0.6) {
+          const driftTime = now * 0.0012;
+          const driftMul = Math.min(1, (introProgress - 0.6) / 0.4);
+          baseX += Math.sin(driftTime * 0.8 + particle.seed * 8) * idleDrift * particle.depth * driftMul;
+          baseY += Math.cos(driftTime * 0.65 + particle.depth * 8) * idleDrift * particle.depth * driftMul;
+        }
+
+        if (pointer.active && !reducedMotion && pointerRepel > 0 && repelRadius > 0 && introProgress > 0.8) {
           const dx = baseX - pointer.smoothX;
           const dy = baseY - pointer.smoothY;
           const distance = Math.hypot(dx, dy);
@@ -187,7 +212,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
         particle.x += (baseX - particle.x) * follow;
         particle.y += (baseY - particle.y) * follow;
 
-        drawParticle(particle);
+        drawParticle(particle, easeIntro);
       });
 
       ctx.shadowBlur = 0;
@@ -339,15 +364,24 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
         const seed = ((index * 9301 + 49297) % 233280) / 233280;
         const depth = 0.5 + (((index * 233 + 97) % 1000) / 1000) * 0.8;
 
+        const scatterRadius = Math.max(25, scatter);
+        const angle = seed * Math.PI * 2;
+        const dist = (0.3 + depth * 0.7) * scatterRadius;
+        const startX = target.x + Math.cos(angle) * dist;
+        const startY = target.y + Math.sin(angle) * dist;
+
         return {
-          x: target.x,
-          y: target.y,
+          x: enableGather ? startX : target.x,
+          y: enableGather ? startY : target.y,
+          startX,
+          startY,
           targetX: target.x,
           targetY: target.y,
           size: Math.max(0.7, particleSize * (0.8 + target.alpha * 0.4)),
           color: '#ffffff',
           seed,
-          depth
+          depth,
+          alpha: target.alpha
         };
       });
 

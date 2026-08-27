@@ -4,7 +4,8 @@ import {
   Play, 
   ArrowRight,
   ChevronDown,
-  Sparkles
+  Sparkles,
+  MessageSquare
 } from 'lucide-react';
 import { soundFx } from '../utils/audioFx';
 import { GradientButton } from './ui/gradient-button';
@@ -17,12 +18,15 @@ import Prism from './Prism';
 interface HeroSectionProps {
   onOpenReel: () => void;
   onExploreProjects: () => void;
-  onOpenRecruiterContact: () => void;
+  onOpenRecruiterContact?: () => void;
+  onOpenContactModal?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenReel,
   onExploreProjects,
+  onOpenRecruiterContact,
+  onOpenContactModal,
 }) => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
@@ -123,7 +127,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         }
       >
         {/* Full Bleed Content revealed upon scroll */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center items-center text-center mt-4 sm:mt-12 pointer-events-auto">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center items-center text-center mt-2 sm:mt-6 pointer-events-auto">
           
           {/* Liquid Glass Capsule Tab */}
           <div className="mb-3 sm:mb-5 pointer-events-auto flex items-center justify-center">
@@ -251,22 +255,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Hero Action Buttons with GradientButton Component */}
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-5 sm:mt-7 w-full sm:w-auto">
             <GradientButton
-              id="hero-watch-sequence-btn"
+              id="hero-show-projects-btn"
               variant="default"
-              onClick={() => {
-                soundFx.playClick();
-                onOpenReel();
-              }}
-              onMouseEnter={() => soundFx.playHover()}
-              className="text-xs sm:text-sm tracking-wider uppercase font-mono-code font-bold py-3 sm:py-3.5 px-6 sm:px-7 min-h-[44px] w-full sm:w-auto"
-            >
-              <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 fill-white text-white shrink-0" />
-              <span>WATCH IN SEQUENCE</span>
-            </GradientButton>
-
-            <GradientButton
-              id="hero-show-all-btn"
-              variant="variant"
               onClick={() => {
                 soundFx.playClick();
                 onExploreProjects();
@@ -276,6 +266,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             >
               <span>SHOW ALL PROJECTS</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1.5 text-white shrink-0" />
+            </GradientButton>
+
+            <GradientButton
+              id="hero-contact-btn"
+              variant="variant"
+              onClick={() => {
+                soundFx.playClick();
+                if (onOpenContactModal) {
+                  onOpenContactModal();
+                } else if (onOpenRecruiterContact) {
+                  onOpenRecruiterContact();
+                }
+              }}
+              onMouseEnter={() => soundFx.playHover()}
+              className="text-xs sm:text-sm tracking-wider uppercase font-mono-code font-bold py-3 sm:py-3.5 px-6 sm:px-7 min-h-[44px] w-full sm:w-auto"
+            >
+              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 text-white shrink-0" />
+              <span>CONTACT</span>
             </GradientButton>
           </div>
 

@@ -97,7 +97,11 @@
   font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease;
+  transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 
@@ -107,7 +111,7 @@
   inset: 0;
   background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.16) 50%, transparent 70%);
   transform: translateX(-120%);
-  transition: transform 0.6s ease;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
@@ -139,7 +143,12 @@
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease, filter 0.35s ease, transform 0.2s ease;
+  transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              color 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-metal::after {
@@ -148,7 +157,7 @@
   inset: 0;
   background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.45) 48%, transparent 76%);
   transform: translateX(-130%);
-  transition: transform 0.65s ease;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
@@ -161,6 +170,10 @@
   color: #111111;
   border: 1px solid #ffffff;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-solid-white:hover {
@@ -175,6 +188,10 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: #ffffff;
+  transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-hero-ghost:hover {
@@ -189,10 +206,13 @@
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+  transition: border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark-glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Subtle Film Grain */
@@ -257,55 +277,55 @@
 @layer base {
   @property --pos-x {
     syntax: '<percentage>';
-    initial-value: 11.14%;
+    initial-value: 15%;
     inherits: false;
   }
 
   @property --pos-y {
     syntax: '<percentage>';
-    initial-value: 140%;
+    initial-value: 100%;
     inherits: false;
   }
 
   @property --spread-x {
     syntax: '<percentage>';
-    initial-value: 150%;
+    initial-value: 140%;
     inherits: false;
   }
 
   @property --spread-y {
     syntax: '<percentage>';
-    initial-value: 180.06%;
+    initial-value: 140%;
     inherits: false;
   }
 
   @property --color-1 {
     syntax: '<color>';
-    initial-value: #000;
+    initial-value: #020005;
     inherits: false;
   }
 
   @property --color-2 {
     syntax: '<color>';
-    initial-value: #08012c;
+    initial-value: #180528;
     inherits: false;
   }
 
   @property --color-3 {
     syntax: '<color>';
-    initial-value: #4e1e40;
+    initial-value: #621c4b;
     inherits: false;
   }
 
   @property --color-4 {
     syntax: '<color>';
-    initial-value: #70464e;
+    initial-value: #9e2d63;
     inherits: false;
   }
 
   @property --color-5 {
     syntax: '<color>';
-    initial-value: #88394c;
+    initial-value: #c23d75;
     inherits: false;
   }
 
@@ -317,37 +337,37 @@
 
   @property --border-color-1 {
     syntax: '<color>';
-    initial-value: hsla(340, 75%, 60%, 0.2);
+    initial-value: hsla(340, 85%, 65%, 0.35);
     inherits: true;
   }
 
   @property --border-color-2 {
     syntax: '<color>';
-    initial-value: hsla(340, 75%, 40%, 0.75);
+    initial-value: hsla(340, 80%, 55%, 0.85);
     inherits: true;
   }
 
   @property --stop-1 {
     syntax: '<percentage>';
-    initial-value: 37.35%;
+    initial-value: 15%;
     inherits: false;
   }
 
   @property --stop-2 {
     syntax: '<percentage>';
-    initial-value: 61.36%;
+    initial-value: 42%;
     inherits: false;
   }
 
   @property --stop-3 {
     syntax: '<percentage>';
-    initial-value: 78.42%;
+    initial-value: 68%;
     inherits: false;
   }
 
   @property --stop-4 {
     syntax: '<percentage>';
-    initial-value: 89.52%;
+    initial-value: 84%;
     inherits: false;
   }
 

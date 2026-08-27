@@ -12,8 +12,10 @@ import { ProjectModal } from './components/ProjectModal';
 import { ContactModal } from './components/ContactModal';
 import { FooterHUD } from './components/FooterHUD';
 import { SideRays } from './components/SideRays';
+import { GhostAIAssistant } from './components/GhostAIAssistant';
 import { ProjectItem } from './types';
 import { PROJECTS_DATA } from './data/projectsData';
+import { MediaPlaybackProvider } from './context/MediaPlaybackContext';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('hero-section');
@@ -134,97 +136,105 @@ export default function App() {
   }, []);
 
   return (
-    <SmoothEntrance>
-      <div className="min-h-screen bg-[#07080b] text-[#e8ebf0] selection:bg-[#e2b170] selection:text-black font-sans relative">
-        
-        {/* Dynamic Parallax Background VFX Video & 3D Interactive Canvas */}
-        <BackgroundVfxCanvas />
-
-        {/* Right-Side Volumetric Light Rays (fades in as Hero Prism scrolls away) */}
-        <div
-          className="fixed top-0 right-0 w-full sm:w-[650px] md:w-[800px] lg:w-[950px] h-screen pointer-events-none z-20 mix-blend-screen transition-opacity duration-500 ease-out"
-          style={{
-            opacity: raysOpacity
-          }}
-          aria-hidden="true"
-        >
-          <SideRays
-            speed={2.5}
-            rayColor1="#EAB308"
-            rayColor2="#96c8ff"
-            intensity={2}
-            spread={2}
-            origin="top-right"
-            tilt={0}
-            saturation={1.5}
-            blend={0.75}
-            falloff={1.6}
-            opacity={1.0}
-          />
-        </div>
-
-        {/* Main Studio Header with Contact Modal Trigger */}
-        <HeaderNavbar
-          activeSection={activeSection}
-          onNavigate={handleNavigate}
-          onOpenContactModal={() => setIsContactModalOpen(true)}
-        />
-
-        {/* Main App Content Sections in exact shelf order */}
-        <main className="relative z-10">
+    <MediaPlaybackProvider>
+      <SmoothEntrance>
+        <div className="min-h-screen bg-[#07080b] text-[#e8ebf0] selection:bg-[#e2b170] selection:text-black font-sans relative">
           
-          {/* 1. Hero Section */}
-          <HeroSection
-            onOpenReel={() => handleNavigate('showreel-section')}
-            onExploreProjects={() => handleNavigate('projects-section')}
-            onOpenRecruiterContact={() => handleNavigate('recruiter-contact')}
-          />
+          {/* Dynamic Parallax Background VFX Video & 3D Interactive Canvas */}
+          <BackgroundVfxCanvas />
 
-          {/* 2. Interactive 2026 Showreel & Shot Breakdown Sheet */}
-          <ShowreelBreakdownSection
-            onOpenProjectById={(projectId) => {
-              const found = PROJECTS_DATA.find((p) => p.id === projectId);
-              if (found) setSelectedProject(found);
+          {/* Right-Side Volumetric Light Rays (fades in as Hero Prism scrolls away) */}
+          <div
+            className="fixed top-0 right-0 w-full sm:w-[650px] md:w-[800px] lg:w-[950px] h-screen pointer-events-none z-20 mix-blend-screen transition-opacity duration-500 ease-out"
+            style={{
+              opacity: raysOpacity
             }}
-          />
+            aria-hidden="true"
+          >
+            <SideRays
+              speed={2.5}
+              rayColor1="#EAB308"
+              rayColor2="#96c8ff"
+              intensity={2}
+              spread={2}
+              origin="top-right"
+              tilt={0}
+              saturation={1.5}
+              blend={0.75}
+              falloff={1.6}
+              opacity={1.0}
+            />
+          </div>
 
-          {/* 3. Projects Showcase Bento Grid */}
-          <ProjectsGrid
-            onSelectProject={(project) => setSelectedProject(project)}
-          />
-
-          {/* 4. VFX Pipeline & Software Toolchain (Locked center-to-center scroll) */}
-          <PipelineAndSkills />
-
-          {/* 5. About Jatin & Experience */}
-          <AboutAndExperience
+          {/* Main Studio Header with Contact Modal Trigger */}
+          <HeaderNavbar
+            activeSection={activeSection}
+            onNavigate={handleNavigate}
             onOpenContactModal={() => setIsContactModalOpen(true)}
           />
 
-          {/* 6. Recruiter & Direct Dispatch Hub */}
-          <RecruiterContactSection />
+          {/* Main App Content Sections in exact shelf order */}
+          <main className="relative z-10">
+            
+            {/* 1. Hero Section */}
+            <HeroSection
+              onOpenReel={() => handleNavigate('showreel-section')}
+              onExploreProjects={() => handleNavigate('projects-section')}
+              onOpenContactModal={() => setIsContactModalOpen(true)}
+            />
 
-        </main>
+            {/* 2. Interactive 2026 Showreel & Shot Breakdown Sheet */}
+            <ShowreelBreakdownSection
+              onOpenProjectById={(projectId) => {
+                const found = PROJECTS_DATA.find((p) => p.id === projectId);
+                if (found) setSelectedProject(found);
+              }}
+            />
 
-        {/* Technical HUD Footer */}
-        <FooterHUD
-          onScrollToTop={handleScrollToTop}
-          onNavigate={handleNavigate}
-        />
+            {/* 3. Projects Showcase Bento Grid */}
+            <ProjectsGrid
+              onSelectProject={(project) => setSelectedProject(project)}
+            />
 
-        {/* Deep-Dive Project Modal */}
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
+            {/* 4. VFX Pipeline & Software Toolchain (Locked center-to-center scroll) */}
+            <PipelineAndSkills />
 
-        {/* Apple Liquid Glass Contact Modal */}
-        <ContactModal
-          isOpen={isContactModalOpen}
-          onClose={() => setIsContactModalOpen(false)}
-        />
+            {/* 5. About Jatin & Experience */}
+            <AboutAndExperience
+              onOpenContactModal={() => setIsContactModalOpen(true)}
+            />
 
-      </div>
-    </SmoothEntrance>
+            {/* 6. Recruiter & Direct Dispatch Hub */}
+            <RecruiterContactSection />
+
+          </main>
+
+          {/* Technical HUD Footer */}
+          <FooterHUD
+            onScrollToTop={handleScrollToTop}
+            onNavigate={handleNavigate}
+          />
+
+          {/* Deep-Dive Project Modal */}
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+
+          {/* Apple Liquid Glass Contact Modal */}
+          <ContactModal
+            isOpen={isContactModalOpen}
+            onClose={() => setIsContactModalOpen(false)}
+          />
+
+          {/* Bottom-Right Floating Interactive Ghost AI Client Agent */}
+          <GhostAIAssistant
+            onOpenContactModal={() => setIsContactModalOpen(true)}
+            onNavigateToSection={handleNavigate}
+          />
+
+        </div>
+      </SmoothEntrance>
+    </MediaPlaybackProvider>
   );
 }

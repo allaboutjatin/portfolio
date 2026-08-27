@@ -3,8 +3,8 @@ import {
   Mail, 
   Copy, 
   Check, 
-  Globe,
-  Linkedin,
+  Globe, 
+  Linkedin, 
   Youtube, 
   Instagram, 
   ExternalLink, 
@@ -75,7 +75,7 @@ export const RecruiterContactSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-14 space-y-2 sm:space-y-3">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 space-y-2 sm:space-y-3">
           <div className="inline-flex items-center space-x-2 text-xs font-mono-code text-slate-300 uppercase tracking-widest px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white/5 border border-white/15 font-bold">
             <Mail className="w-3.5 h-3.5 text-sky-400" />
             <span>Connect & Collaborate</span>

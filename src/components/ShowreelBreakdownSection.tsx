@@ -3,17 +3,15 @@ import {
   Film, 
   Play, 
   Layers, 
-  CheckCircle2, 
   ExternalLink,
-  ArrowUpRight,
   Sparkles,
-  Sliders,
-  Tv
+  Radio
 } from 'lucide-react';
 import { PROJECTS_DATA } from '../data/projectsData';
 import { ProjectItem } from '../types';
 import { soundFx } from '../utils/audioFx';
 import { BorderGlow } from './ui/BorderGlow';
+import { useMediaPlayback } from '../context/MediaPlaybackContext';
 
 interface ShowreelBreakdownSectionProps {
   onOpenProjectById?: (projectId: string) => void;
@@ -24,13 +22,15 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
 }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>(PROJECTS_DATA[0].id);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const { startPlayback, stopPlayback } = useMediaPlayback();
 
   const selectedProject = PROJECTS_DATA.find((p) => p.id === selectedProjectId) || PROJECTS_DATA[0];
 
   const handleSelectProject = (project: ProjectItem) => {
     soundFx.playClick();
     setSelectedProjectId(project.id);
-    setIsPlaying(true);
+    setIsPlaying(false);
+    stopPlayback();
   };
 
   return (
@@ -47,26 +47,47 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
             4K <em className="font-serif-italic font-normal text-[#9a9a9a] not-italic text-[1.08em] tracking-tight">Cinematic</em> Showcase
           </h2>
           <p className="text-[#9a9a9a] text-xs sm:text-base max-w-2xl mt-1.5 sm:mt-2 leading-relaxed">
-            Select any project from the interactive list to immediately load and stream its 4K cinematic film and technical workflow details.
+            Select any project from the interactive playlist to immediately stream its 4K cinematic film, production master audio, and breakdown workflow.
           </p>
         </div>
 
-        {/* Video Player + Selectable Project List Synchronizer */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
-          
-          {/* Main Video Viewport (Full width on mobile, 7 Cols on desktop) */}
-          <div className="w-full lg:col-span-7">
-            <BorderGlow
-              borderRadius={20}
-              glowRadius={35}
-              edgeSensitivity={30}
-              glowIntensity={1.0}
-              backgroundColor="#0b0b0e"
-              colors={['#38bdf8', '#c084fc', '#34d399']}
-              className="w-full shadow-2xl overflow-hidden"
-            >
-              {/* Viewport Frame */}
-              <div className="relative aspect-video w-full bg-black overflow-hidden group rounded-t-[19px]">
+        {/* ONE UNIFIED MASTER CINEMA WORKSTATION DECK */}
+        <BorderGlow
+          borderRadius={24}
+          glowRadius={38}
+          edgeSensitivity={30}
+          glowIntensity={0.95}
+          backgroundColor="#090a0d"
+          colors={['#38bdf8', '#818cf8', '#34d399']}
+          className="w-full shadow-2xl overflow-hidden border border-white/10"
+        >
+          {/* Workstation Top Control Bar */}
+          <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-transparent border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="flex items-center space-x-2.5">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
+              </span>
+              <span className="text-xs font-mono-code font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+                <Radio className="w-3.5 h-3.5 text-cyan-400" />
+                <span>4K CINEMATIC PRODUCTION STREAMER</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono-code bg-white/5 border border-white/10 px-2.5 py-1 rounded-md text-slate-400">
+                DCI 4K • 24 FPS • 48kHz PCM
+              </span>
+            </div>
+          </div>
+
+          {/* Unified Middle Area: 4K Cinema Player (Left) + Interactive Project Playlist (Right) */}
+          <div className="p-4 sm:p-6 lg:p-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            {/* Left Column: 4K Cinema Viewport (7 Cols) */}
+            <div className="lg:col-span-7 flex flex-col space-y-4">
+              
+              {/* Screen Frame */}
+              <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden border border-white/15 shadow-2xl group">
                 {selectedProject.youtubeId && isPlaying ? (
                   <iframe
                     key={selectedProject.youtubeId}
@@ -82,6 +103,7 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
                     onClick={() => {
                       if (selectedProject.youtubeId) {
                         setIsPlaying(true);
+                        startPlayback(selectedProject.title, selectedProject.categoryLabel);
                       } else if (onOpenProjectById) {
                         onOpenProjectById(selectedProject.id);
                       }
@@ -95,32 +117,32 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
                     
                     {/* Play / Coming Soon Overlay */}
                     {selectedProject.isComingSoon ? (
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent flex flex-col justify-end p-4 sm:p-8">
-                        <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-amber-400 text-black font-mono-code text-[11px] sm:text-xs font-bold w-fit mb-1.5 sm:mb-2 shadow-lg">
-                          <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent flex flex-col justify-end p-4 sm:p-6">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-400 text-black font-mono-code text-[11px] font-bold w-fit mb-1.5 shadow-lg">
+                          <Sparkles className="w-3.5 h-3.5 fill-current" />
                           <span>COMING SOON • IN PRODUCTION</span>
                         </div>
-                        <h4 className="text-xl sm:text-3xl font-display font-extrabold text-white">
+                        <h4 className="text-xl sm:text-2xl font-display font-extrabold text-white">
                           {selectedProject.title}
                         </h4>
-                        <p className="text-[11px] sm:text-sm text-slate-300 max-w-xl mt-0.5 sm:mt-1 line-clamp-2 sm:line-clamp-none">
+                        <p className="text-[11px] sm:text-xs text-slate-300 max-w-xl mt-0.5 line-clamp-2">
                           Formula 1 Real-time track cinematic currently being developed in Unreal Engine. High-octane teaser & breakdown release coming soon.
                         </p>
                       </div>
                     ) : (
                       <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center transition-all group-hover:bg-black/30">
-                        <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-white text-black flex items-center justify-center shadow-2xl transform transition-transform group-hover:scale-110 min-w-[50px] min-h-[50px]">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white text-black flex items-center justify-center shadow-2xl transform transition-transform group-hover:scale-110">
                           <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-black translate-x-0.5" />
                         </div>
                       </div>
                     )}
 
                     {/* Top Badges */}
-                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 pointer-events-none flex items-center space-x-1.5 sm:space-x-2">
-                      <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg bg-black/80 backdrop-blur-md border border-white/20 text-[10px] sm:text-[11px] font-mono-code text-white">
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 pointer-events-none flex items-center space-x-2">
+                      <span className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/20 text-[10px] sm:text-[11px] font-mono-code text-white">
                         {selectedProject.categoryLabel}
                       </span>
-                      <span className="px-1.5 sm:px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-[9px] sm:text-[10px] font-mono-code text-emerald-300 font-semibold">
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-[10px] font-mono-code text-emerald-300 font-semibold">
                         {selectedProject.renderEngine}
                       </span>
                     </div>
@@ -128,8 +150,8 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
                 )}
               </div>
 
-              {/* Video Control Bar & Specs Under Player */}
-              <div className="p-4 sm:p-6 bg-gradient-to-b from-[#0b0b0e] to-black border-t border-white/10 space-y-3 sm:space-y-4">
+              {/* Title & Metadata Strip Under Player */}
+              <div className="space-y-2.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <h3 className="text-lg sm:text-xl font-display font-extrabold text-white">
@@ -143,8 +165,9 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
                   <div className="flex items-center space-x-2">
                     {onOpenProjectById && (
                       <button
+                        type="button"
                         onClick={() => onOpenProjectById(selectedProject.id)}
-                        className="px-3 sm:px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] sm:text-xs font-mono-code flex items-center space-x-1.5 transition-all cursor-pointer min-h-[36px]"
+                        className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-mono-code flex items-center space-x-1.5 transition-all cursor-pointer"
                       >
                         <Layers className="w-3.5 h-3.5 text-sky-400" />
                         <span>Breakdown Specs</span>
@@ -155,7 +178,7 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
                         href={selectedProject.youtubeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white transition-all min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white transition-all flex items-center justify-center"
                         title="Open in YouTube"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -164,91 +187,87 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   {selectedProject.overview}
                 </p>
 
-                {/* Software Tags */}
-                <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-2">
+                {/* Software Stack */}
+                <div className="flex flex-wrap gap-1.5 pt-1">
                   {selectedProject.softwareStack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/5 border border-white/10 text-[11px] sm:text-xs font-mono-code text-slate-300"
+                      className="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/10 text-[11px] font-mono-code text-slate-300"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
               </div>
-            </BorderGlow>
-          </div>
 
-          {/* Selectable Projects List (Hidden on mobile/tablet, 5 Cols on Desktop) */}
-          <div className="hidden lg:block lg:col-span-5 space-y-3">
-            <div className="flex items-center justify-between px-1 mb-2">
-              <span className="text-xs font-mono-code text-slate-400 uppercase tracking-wider font-semibold">
-                SELECT PROJECT STREAM ({PROJECTS_DATA.length})
-              </span>
-              <span className="text-xs font-mono-code text-slate-500">
-                CLICK TO SWITCH
-              </span>
             </div>
 
-            {PROJECTS_DATA.map((project) => {
-              const isSelected = project.id === selectedProjectId;
-              return (
-                <BorderGlow
-                  key={project.id}
-                  id={`project-stream-item-${project.id}`}
-                  borderRadius={18}
-                  glowRadius={25}
-                  edgeSensitivity={35}
-                  glowIntensity={0.9}
-                  backgroundColor={isSelected ? '#14141a' : '#0b0b0e'}
-                  colors={isSelected ? ['#38bdf8', '#c084fc', '#34d399'] : ['#808080', '#38bdf8', '#a855f7']}
-                  onClick={() => handleSelectProject(project)}
-                  className={`cursor-pointer transition-all ${
-                    isSelected ? 'ring-1 ring-sky-400/40 shadow-lg' : ''
-                  }`}
-                >
-                  <div className="p-3.5 flex items-center space-x-4">
-                    {/* Thumbnail */}
-                    <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0 border border-white/15 bg-black">
-                      <img
-                        src={project.heroImage}
-                        alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      />
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <Play className={`w-4 h-4 ${isSelected ? 'fill-white text-white' : 'text-slate-300'}`} />
-                      </div>
-                    </div>
+            {/* Right Column: Interactive Playlist (5 Cols) */}
+            <div className="lg:col-span-5 flex flex-col space-y-2.5">
+              <div className="flex items-center justify-between px-1 mb-1">
+                <span className="text-xs font-mono-code text-slate-300 uppercase tracking-wider font-bold">
+                  PROJECT PLAYLIST ({PROJECTS_DATA.length})
+                </span>
+                <span className="text-[10px] font-mono-code text-slate-400">
+                  CLICK TO STREAM
+                </span>
+              </div>
 
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h4 className={`text-sm font-display font-bold truncate ${isSelected ? 'text-white' : 'text-slate-200'}`}>
+              <div className="space-y-2 max-h-[460px] overflow-y-auto pr-1">
+                {PROJECTS_DATA.map((project) => {
+                  const isSelected = project.id === selectedProjectId;
+                  return (
+                    <div
+                      key={project.id}
+                      onClick={() => handleSelectProject(project)}
+                      className={`group p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer flex items-center space-x-3.5 ${
+                        isSelected
+                          ? 'bg-white/10 border-sky-400/50 shadow-lg shadow-sky-500/10'
+                          : 'bg-white/[0.03] border-white/10 hover:bg-white/[0.07] hover:border-white/20'
+                      }`}
+                    >
+                      {/* Thumbnail */}
+                      <div className="relative w-16 h-12 sm:w-20 sm:h-14 rounded-lg overflow-hidden shrink-0 border border-white/15 bg-black">
+                        <img
+                          src={project.heroImage}
+                          alt={project.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        />
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                          <Play className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSelected ? 'fill-white text-white' : 'text-slate-300'}`} />
+                        </div>
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className={`text-xs sm:text-sm font-sans font-bold tracking-tight truncate ${isSelected ? 'text-white' : 'text-slate-200'}`}>
                           {project.title}
                         </h4>
+                        <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                          {project.categoryLabel} • {project.renderEngine}
+                        </p>
                       </div>
-                      <p className="text-xs text-slate-400 truncate mt-0.5 font-normal">
-                        {project.categoryLabel} • {project.renderEngine}
-                      </p>
-                    </div>
 
-                    {isSelected && (
-                      <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] shrink-0" />
-                    )}
-                  </div>
-                </BorderGlow>
-              );
-            })}
+                      {isSelected && (
+                        <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#38bdf8] shrink-0" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
           </div>
 
-        </div>
+        </BorderGlow>
 
       </div>
     </section>
   );
 };
+
 

@@ -1,33 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
-  User, 
   MapPin, 
   Sparkles,
   ArrowRight,
-  MessageSquare
+  Cpu,
+  Layers,
+  Activity
 } from 'lucide-react';
 import { soundFx } from '../utils/audioFx';
 import { GradientButton } from './ui/gradient-button';
 import { BorderGlow } from './ui/BorderGlow';
+import { GradientOrb } from './ui/gradient-orb';
 
 interface AboutAndExperienceProps {
   onOpenContactModal: () => void;
 }
 
+const ORB_PRESETS = [
+  { name: 'Cosmic', hue: 0, speed: 0.3, label: '01' },
+  { name: 'Cyber', hue: 140, speed: 0.45, label: '02' },
+  { name: 'Solar', hue: 45, speed: 0.35, label: '03' },
+  { name: 'Violet', hue: 270, speed: 0.25, label: '04' },
+];
+
 export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
   onOpenContactModal
 }) => {
+  const [activePresetIndex, setActivePresetIndex] = useState(0);
+  const activePreset = ORB_PRESETS[activePresetIndex];
   return (
     <section id="about-section" className="py-12 sm:py-20 relative z-10 bg-black text-white border-t border-white/10 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-4">
+        <div className="mb-8 sm:mb-10">
           <div>
-            <div className="inline-flex items-center space-x-2 text-xs font-mono-code text-slate-300 uppercase tracking-widest mb-1.5 sm:mb-2 font-semibold">
-              <User className="w-3.5 h-3.5 text-sky-400" />
-              <span>Background & Creative Direction</span>
-            </div>
             <h2 className="text-2xl sm:text-5xl font-display font-semibold text-white tracking-tight leading-[1.15]">
               About <em className="font-serif-italic font-normal text-[#9a9a9a] not-italic text-[1.08em] tracking-tight">Jatin</em>
             </h2>
@@ -35,20 +42,6 @@ export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
               3D Artist • VFX & CGI Filmmaker • Real-Time Technical Director
             </p>
           </div>
-
-          <GradientButton
-            id="about-contact-btn"
-            variant="default"
-            onClick={() => {
-              soundFx.playClick();
-              onOpenContactModal();
-            }}
-            onMouseEnter={() => soundFx.playHover()}
-            className="text-xs font-semibold py-2.5 sm:py-3 px-5 sm:px-6 min-h-[44px] w-full sm:w-auto"
-          >
-            <MessageSquare className="w-4 h-4 mr-2 text-white shrink-0" />
-            <span>Contact Jatin</span>
-          </GradientButton>
         </div>
 
         {/* Unified Layout */}
@@ -162,8 +155,93 @@ export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
             </BorderGlow>
           </div>
 
-          {/* Right Action & Interview Card (4 Cols) */}
-          <div className="lg:col-span-4 flex flex-col justify-start">
+          {/* Right Column: Look-Dev Shader Lab + Action Card (4 Cols) */}
+          <div className="lg:col-span-4 flex flex-col gap-6 sm:gap-8 justify-start">
+            
+            {/* Real-Time Shader Core Card */}
+            <BorderGlow
+              borderRadius={20}
+              glowRadius={30}
+              edgeSensitivity={28}
+              glowIntensity={0.9}
+              backgroundColor="#0b0b0e"
+              colors={['#818cf8', '#c084fc', '#38bdf8']}
+              className="shadow-2xl overflow-hidden"
+            >
+              <div className="p-4 sm:p-6 space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                    <span className="text-[11px] font-mono-code uppercase tracking-wider text-slate-300 font-bold flex items-center gap-1.5">
+                      <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Look-Dev Shader Core</span>
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono-code text-slate-400 bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
+                    WebGL 2.0
+                  </span>
+                </div>
+
+                {/* Orb Viewport */}
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#0a0a0a] border border-white/10 shadow-inner group">
+                  <GradientOrb
+                    config={{
+                      background: "#0a0a0a",
+                      hue: activePreset.hue,
+                      rotationSpeed: activePreset.speed,
+                      noiseScale: 0.65,
+                      innerRadius: 0.1
+                    }}
+                    className="w-full h-full"
+                  />
+
+                  {/* HUD Overlay elements */}
+                  <div className="absolute top-2.5 left-2.5 px-2 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[9px] font-mono-code text-slate-300 flex items-center gap-1 pointer-events-none">
+                    <Activity className="w-3 h-3 text-emerald-400" />
+                    <span>60 FPS • GPU LIVE</span>
+                  </div>
+
+                  <div className="absolute bottom-2.5 right-2.5 px-2 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[9px] font-mono-code text-slate-300 flex items-center gap-1 pointer-events-none">
+                    <Layers className="w-3 h-3 text-purple-400" />
+                    <span>GLSL SIMPLEX</span>
+                  </div>
+                </div>
+
+                {/* Interactive Preset Buttons */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-[10px] font-mono-code text-slate-400">
+                    <span>SHADER SPECTRUM PRESETS</span>
+                    <span className="text-white font-semibold">{activePreset.name}</span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {ORB_PRESETS.map((preset, idx) => {
+                      const isActive = activePresetIndex === idx;
+                      return (
+                        <button
+                          key={preset.name}
+                          type="button"
+                          onClick={() => {
+                            soundFx.playClick();
+                            setActivePresetIndex(idx);
+                          }}
+                          onMouseEnter={() => soundFx.playHover()}
+                          className={`py-1.5 px-2 rounded-lg text-[10px] font-mono-code font-bold transition-all duration-200 cursor-pointer border text-center ${
+                            isActive
+                              ? 'bg-white text-black border-white shadow-md shadow-white/10 scale-[1.02]'
+                              : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10 hover:text-white'
+                          }`}
+                        >
+                          {preset.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </BorderGlow>
+
+            {/* Action & Availability Card */}
             <BorderGlow
               borderRadius={20}
               glowRadius={30}
@@ -198,7 +276,7 @@ export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
                     }}
                     className="w-full text-xs font-bold uppercase tracking-wider py-3 sm:py-3.5 min-h-[44px]"
                   >
-                    <span>Connect with Jatin</span>
+                    <span>CONNECT</span>
                     <ArrowRight className="w-4 h-4 ml-1.5" />
                   </GradientButton>
                 </div>

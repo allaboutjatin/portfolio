@@ -85,7 +85,7 @@ export const ProjectsGrid: React.FC<ProjectsGridProps> = ({ onSelectProject }) =
                   <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
                     <div>
                       <div className="flex items-start justify-between gap-2">
-                        <h3 className="text-lg sm:text-xl font-display font-black text-white group-hover:text-sky-300 transition-colors">
+                        <h3 className="text-lg sm:text-xl font-sans font-bold tracking-tight text-white group-hover:text-sky-300 transition-colors">
                           {project.title}
                         </h3>
                         <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />

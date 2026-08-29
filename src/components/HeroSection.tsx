@@ -41,10 +41,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
 
-  // Responsive start card proportions: compact and sleek on mobile, balanced on desktop
-  const startWidth = isMobile ? 54 : isTablet ? 48 : 36;
-  const startHeight = isMobile ? 26 : isTablet ? 34 : 36;
-  const startRadius = isMobile ? 18 : 24;
+  // Responsive start card proportions: snug and compact, ~3cm from 'J' and 'r'
+  const startWidth = isMobile ? 50 : isTablet ? 40 : 30;
+  const startHeight = isMobile ? 24 : isTablet ? 28 : 29;
+  const startRadius = isMobile ? 18 : 22;
 
   return (
     <section id="hero-section" className="relative w-full bg-black text-white">
@@ -75,13 +75,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         holdDistance={0.2}
         overlayScrim={0.55}
         title={
-          <div className="flex flex-col items-center justify-center select-none px-2 w-full max-w-xl">
+          <div className="flex flex-col items-center justify-center select-none px-4 w-full max-w-lg">
             <div className="inline-flex items-center gap-1.5 sm:gap-2 mb-1 px-3 sm:px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[9px] sm:text-[11px] font-mono-code text-slate-300 backdrop-blur-md">
               <Sparkles className="w-3 h-3 text-amber-300 fill-amber-300 shrink-0" />
               <span className="font-semibold tracking-wider uppercase">3D & VFX Director</span>
             </div>
             
-            <div className="w-full h-[115px] sm:h-[150px] md:h-[170px] flex items-center justify-center">
+            <div className="w-full h-[110px] sm:h-[135px] md:h-[155px] flex items-center justify-center">
               <ParticleText
                 parts={[
                   {
@@ -103,14 +103,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 density={isMobile ? 3.3 : 3.2}
                 color="#ffffff"
                 highlightColor="#ffffff"
-                scatter={isMobile ? 40 : 45}
+                scatter={isMobile ? 35 : 40}
                 gatherDuration={1.3}
                 enableGather={true}
                 trigger="mount"
                 pointerRepel={isMobile ? 40 : 50}
                 repelRadius={isMobile ? 100 : 120}
                 idleDrift={0.5}
-                fontSize={isMobile ? "clamp(2.6rem, 11vw, 3.8rem)" : "clamp(2.3rem, 5.5vw, 4.4rem)"}
+                fontSize={isMobile ? "clamp(2.4rem, 10vw, 3.4rem)" : "clamp(2.1rem, 4.5vw, 3.8rem)"}
                 glow={true}
                 className="w-full h-full"
               />

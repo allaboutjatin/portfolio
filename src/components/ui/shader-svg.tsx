@@ -9,6 +9,7 @@ interface MeshGradientSVGProps {
   colors?: string[];
   size?: number;
   interactive?: boolean;
+  thinking?: boolean;
 }
 
 export function MeshGradientSVG({
@@ -22,6 +23,7 @@ export function MeshGradientSVG({
   ],
   size,
   interactive = true,
+  thinking = false,
 }: MeshGradientSVGProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
@@ -39,6 +41,12 @@ export function MeshGradientSVG({
   }, [interactive]);
 
   useEffect(() => {
+    if (thinking) {
+      // While thinking, eyes gaze gently upward and wander slightly
+      setEyeOffset({ x: 1.5, y: -7 });
+      return;
+    }
+
     if (!interactive) return;
 
     if (svgRef.current) {
@@ -55,7 +63,7 @@ export function MeshGradientSVG({
         y: Math.max(-maxOffset, Math.min(maxOffset, deltaY)),
       });
     }
-  }, [mousePosition, interactive]);
+  }, [mousePosition, interactive, thinking]);
 
   return (
     <motion.div
@@ -164,6 +172,25 @@ export function MeshGradientSVG({
             />
           </g>
         </motion.g>
+
+        {/* Animated Thinking Sparkles / Thought Indicator */}
+        {thinking && (
+          <g className="duddu-thinking-nodes">
+            {/* Thought particle 1 */}
+            <circle cx="185" cy="55" r="5" fill="#38bdf8" className="animate-ping" style={{ animationDuration: '1.4s' }} />
+            <circle cx="185" cy="55" r="4.5" fill="#67e8f9" />
+            {/* Thought particle 2 */}
+            <circle cx="205" cy="35" r="7" fill="#c084fc" className="animate-pulse" style={{ animationDuration: '1.2s' }} />
+            <circle cx="205" cy="35" r="6" fill="#e879f9" />
+            {/* Thought particle 3 with sparkle */}
+            <path
+              d="M 215 15 L 217 22 L 224 24 L 217 26 L 215 33 L 213 26 L 206 24 L 213 22 Z"
+              fill="#fef08a"
+              className="animate-spin"
+              style={{ transformOrigin: '215px 24px', animationDuration: '3s' }}
+            />
+          </g>
+        )}
       </svg>
 
       <style>{`

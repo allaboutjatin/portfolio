@@ -13,11 +13,11 @@ import { soundFx } from '../utils/audioFx';
 import { BorderGlow } from './ui/BorderGlow';
 import { useMediaPlayback } from '../context/MediaPlaybackContext';
 
-interface ShowreelBreakdownSectionProps {
+interface CinematicShowcaseSectionProps {
   onOpenProjectById?: (projectId: string) => void;
 }
 
-export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> = ({
+export const CinematicShowcaseSection: React.FC<CinematicShowcaseSectionProps> = ({
   onOpenProjectById
 }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>(PROJECTS_DATA[0].id);
@@ -170,7 +170,7 @@ export const ShowreelBreakdownSection: React.FC<ShowreelBreakdownSectionProps> =
                         className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-mono-code flex items-center space-x-1.5 transition-all cursor-pointer"
                       >
                         <Layers className="w-3.5 h-3.5 text-sky-400" />
-                        <span>Breakdown Specs</span>
+                        <span>{selectedProject.id === 'project-redline' ? 'Breakdown Specs' : 'Project Details'}</span>
                       </button>
                     )}
                     {selectedProject.youtubeUrl && (

@@ -77,13 +77,45 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [popupBubble, setPopupBubble] = useState<string | null>(null);
   const [unreadCount, setUnreadCount] = useState(1);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const popupIndexRef = useRef<number>(0);
+
+  // Stable callback refs to prevent unnecessary resets
+  const navRef = useRef(onNavigateToSection);
+  const modalRef = useRef(onOpenContactModal);
+
+  useEffect(() => {
+    navRef.current = onNavigateToSection;
+    modalRef.current = onOpenContactModal;
+  }, [onNavigateToSection, onOpenContactModal]);
+
+  // Persistent messages state with initial greeting
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    {
+      id: 'msg-welcome',
+      sender: 'ghost',
+      text: `Hi there! 👋 I’m Duddu, Jatin’s AI Assistant.\n\nI know everything about his Unreal Engine cinematics, Houdini VFX pipeline, studio production experience, education journey, and software skills.\n\nAsk me anything, I’ll respond if I know that... ✨`,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      quickActions: [
+        {
+          label: 'View Cinematics 🎬',
+          action: () => {
+            if (navRef.current) navRef.current('showreel-section');
+          },
+        },
+        {
+          label: 'Contact Jatin 💌',
+          action: () => {
+            if (modalRef.current) modalRef.current();
+          },
+        },
+      ],
+    },
+  ]);
 
   const POPUP_MESSAGES = [
     'Hi! I’m Duddu 👻 Ask me anything about Jatin’s 3D work!',
@@ -96,7 +128,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
     'pipeline-section': 'These are all the powerhouse software and tools Jatin uses in his daily workflow! 💻⚡',
     'experience-section': 'Here is Jatin’s full studio journey and total production experience so far! 🚀',
     'about-section': 'Here is more about Jatin’s background, creative philosophy, and vision! 🎨✨',
-    'showreel-section': 'Check out Jatin’s 4K showreel & behind-the-scenes lookdev breakdowns! 🎬',
+    'showreel-section': 'Check out Jatin’s 4K cinematic showcase & behind-the-scenes Unreal Engine footage! 🎬',
     'recruiter-contact': 'Ready to collaborate or hire Jatin? You can connect directly right here! 📬',
     'hero-section': 'Hi! I’m Duddu 👻 Ask me anything about Jatin’s 3D work!',
   };
@@ -104,35 +136,27 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
   const currentSectionRef = useRef<string>('hero-section');
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const idleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const openScrollYRef = useRef<number>(0);
 
-  // Initial welcome message setup
+  // Store window scroll position whenever the chatbox opens
   useEffect(() => {
-    const initialGreeting: ChatMessage = {
-      id: 'msg-welcome',
-      sender: 'ghost',
-      text: `Hi there! 👋 I’m Duddu, Jatin’s AI Assistant.\n\nI know everything about his Unreal Engine cinematics, Houdini VFX pipeline, studio production experience, education journey, and software skills.\n\nAsk me anything, I’ll respond if I know that...`,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      quickActions: [
-        {
-          label: 'View Showreel 🎬',
-          action: () => {
-            if (onNavigateToSection) onNavigateToSection('showreel-section');
-          },
-        },
-        {
-          label: 'Contact Jatin 💌',
-          action: () => onOpenContactModal(),
-        },
-      ],
-    };
-    setMessages([initialGreeting]);
-  }, [onNavigateToSection, onOpenContactModal]);
+    if (isOpen) {
+      openScrollYRef.current = window.scrollY;
+    }
+  }, [isOpen]);
 
-  // Track scroll visibility (slide in when hero expands after Jatin Kumar slide)
+  // Track scroll visibility and minimize chatbox when user scrolls the site
   useEffect(() => {
-    const checkScroll = () => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
       const scrollThreshold = typeof window !== 'undefined' ? Math.min(window.innerHeight * 0.35, 260) : 200;
-      if (window.scrollY > scrollThreshold) {
+
+      // Minimize the chatbox when the user starts scrolling the site again
+      if (isOpen && Math.abs(currentScrollY - openScrollYRef.current) > 25) {
+        setIsOpen(false);
+      }
+
+      if (currentScrollY > scrollThreshold) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -140,10 +164,10 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       }
     };
 
-    checkScroll();
-    window.addEventListener('scroll', checkScroll, { passive: true });
-    return () => window.removeEventListener('scroll', checkScroll);
-  }, []);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isOpen]);
 
   // Section Observer & Idle Pause Shuffling Logic
   useEffect(() => {
@@ -257,39 +281,56 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
   const generateAnswer = (query: string): { text: string; quickActions?: { label: string; action: () => void }[] } => {
     const q = query.toLowerCase().trim();
 
-    // 1. Identity of Duddu
+    // 1. Identity of Duddu / Who are you
     if (
       q.includes('who are you') ||
       q.includes('what is duddu') ||
       q.includes('who is duddu') ||
       q.includes('your name') ||
-      q.includes('tell me about yourself')
+      q.includes('tell me about yourself') ||
+      q.includes('what are you') ||
+      q.includes('are you ai') ||
+      q.includes('who created you') ||
+      q.includes('who made you') ||
+      q.includes('what can you do')
     ) {
       return {
-        text: `Hey there! 👻 I'm Duddu, Jatin Kumar’s personal AI companion and 3D portfolio guide!\n\nI live here on Jatin's website and I'm trained with full knowledge about his:\n• Unreal Engine 5.5/5.6 real-time cinematics & lighting\n• Houdini procedural VFX & Maya 3D hard-surface modeling\n• Education, BCA journey, and transition into 3D\n• 4+ Years of broadcast media production experience\n• Direct contact, WhatsApp, and collaboration channels\n\nFeel free to ask me anything!`,
+        text: `Hey there! 👻 I'm Duddu, Jatin Kumar’s interactive AI companion and 3D portfolio guide!\n\nI was created to help you explore Jatin's creative universe and answer your questions about:\n• Unreal Engine 5.6 real-time cinematics & lighting\n• SideFX Houdini procedural VFX & Maya Sub-D modeling\n• Education, BCA journey, and how he transitioned into 3D\n• 4+ Years of broadcast media production experience\n• Direct contact, WhatsApp, email, and hiring availability\n\nAsk me anything, I’ll respond if I know that... ✨`,
         quickActions: [
           {
             label: 'Who is Jatin? 👤',
             action: () => handleSendMessage('Who is Jatin Kumar?'),
           },
           {
-            label: 'View Showreel 🎬',
+            label: 'Education & BCA 🎓',
+            action: () => handleSendMessage('Tell me about Jatin’s education and BCA journey'),
+          },
+          {
+            label: 'Contact & WhatsApp 📬',
+            action: () => handleSendMessage('How can I contact Jatin or get his WhatsApp?'),
+          },
+          {
+            label: 'View Cinematics 🎬',
             action: () => onNavigateToSection && onNavigateToSection('showreel-section'),
           },
         ],
       };
     }
 
-    // 2. Identity of Jatin Kumar
+    // 2. Identity of Jatin Kumar / Who is Jatin
     if (
       q.includes('who is jatin') ||
       q.includes('about jatin') ||
       q.includes('tell me about jatin') ||
       q.includes('who are jatin') ||
-      q.includes('who is he')
+      q.includes('who is he') ||
+      q.includes('what does jatin do') ||
+      q.includes('jatin kumar') ||
+      q.includes('profile') ||
+      q.includes('background')
     ) {
       return {
-        text: `Jatin Kumar is a 3D Artist, Real-Time Technical Director, and Creative Technologist based in Noida (Delhi NCR), India 🇮🇳.\n\nKey Highlights:\n• Core Specialization: Unreal Engine 5 real-time cinematics, SideFX Houdini procedural VFX, and Autodesk Maya Sub-D hard-surface modeling.\n• Studio Background: Over 4+ years of high-pressure media production spanning broadcast journalism, high-profile dignitaries coverage, and video editing for a studio with 1.5M+ subscribers.\n• Philosophy: Combining artistic cinematic lookdev with deep technical problem-solving.\n\nHe is currently open to full-time studio roles, remote contracts, and freelance projects!`,
+        text: `Jatin Kumar is a 3D Artist, Real-Time Technical Director, and Creative Technologist based in Noida (Delhi NCR), India 🇮🇳.\n\nKey Highlights:\n• Core Specialization: Unreal Engine 5 real-time cinematics, SideFX Houdini procedural VFX, and Autodesk Maya Sub-D hard-surface modeling.\n• Studio Background: Over 4+ years of high-pressure media production spanning broadcast journalism, high-profile dignitaries coverage, and video editing for a studio with 1.5M+ subscribers.\n• Philosophy: Combining photorealistic cinematic lookdev with deep technical problem-solving.\n\nHe is currently open to full-time studio roles, remote contracts, and freelance projects!`,
         quickActions: [
           {
             label: 'Read Full Bio 📖',
@@ -299,29 +340,93 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
             label: 'Contact Jatin 💌',
             action: () => onOpenContactModal(),
           },
+          {
+            label: 'View Projects 🎨',
+            action: () => onNavigateToSection && onNavigateToSection('projects-section'),
+          },
         ],
       };
     }
 
-    // 3. College, BCA, Graduation, Dropout Story & Education
+    // 3. When Jatin started BCA / Enrolled in College
     if (
-      q.includes('college') ||
-      q.includes('graduation') ||
-      q.includes('graduate') ||
-      q.includes('bca') ||
-      q.includes('drop') ||
+      q.includes('when jatin started studying bca') ||
+      q.includes('when did jatin start bca') ||
+      q.includes('start bca') ||
+      q.includes('started bca') ||
+      q.includes('joined college') ||
+      q.includes('join college') ||
+      q.includes('when he joined college') ||
+      q.includes('when did he join college') ||
+      q.includes('college join') ||
+      q.includes('enrolled in college') ||
+      q.includes('which college') ||
+      q.includes('admission')
+    ) {
+      return {
+        text: `When Jatin Started College & BCA 🎓:\n\n• Initial Path: Jatin originally enrolled in college to study BCA (Bachelor of Computer Applications) with the goal of building strong computational fundamentals, coding skills, and software logic.\n\n• The Turning Point: During his BCA coursework, he discovered a profound calling for 3D Computer Graphics, CGI, procedural simulations, and cinematic storytelling. He realized that while computer science logic was invaluable, his true destiny lay in the world of 3D visual arts.\n\n• Technical Synergy: The foundational computer science and algorithmic thinking he acquired during his BCA period became a superpower for writing Houdini VEX expressions, Unreal Engine Blueprints, and real-time shader pipelines!`,
+        quickActions: [
+          {
+            label: 'Why did he drop out? 🚀',
+            action: () => handleSendMessage('Why did Jatin drop out from BCA?'),
+          },
+          {
+            label: 'View Skills Pipeline ⚡',
+            action: () => onNavigateToSection && onNavigateToSection('pipeline-section'),
+          },
+        ],
+      };
+    }
+
+    // 4. When & Why Jatin dropped out from BCA
+    if (
+      q.includes('droped out') ||
+      q.includes('dropped out') ||
+      q.includes('drop out') ||
       q.includes('dropout') ||
+      q.includes('why did he drop out') ||
+      q.includes('why drop out') ||
+      q.includes('why did jatin drop out') ||
+      q.includes('left college') ||
+      q.includes('leave college') ||
+      q.includes('quit college')
+    ) {
+      return {
+        text: `Why Jatin Dropped Out from BCA 💡:\n\n• A Decisive Pivot: While studying BCA (Bachelor of Computer Applications), Jatin realized that standard software programming alone did not fulfill his creative drive for cinematic visual storytelling and photorealistic CGI.\n\n• 100% Immersion in 3D: Rather than continuing on a path he wasn't passionate about, Jatin made the bold, intentional decision to drop out of BCA and dedicate 100% of his daily hours to mastering professional 3D Animation, VFX, and Real-Time graphics.\n\n• The Outcome: He transitioned directly into comprehensive specialization in 3D & VFX, mastering Unreal Engine 5, SideFX Houdini, Autodesk Maya, and Substance 3D Painter. His CS background still gives him an exceptional technical edge in procedural workflows and real-time optimization!`,
+        quickActions: [
+          {
+            label: 'Did he complete graduation? 🎓',
+            action: () => handleSendMessage('When did Jatin complete his graduation?'),
+          },
+          {
+            label: 'Explore Projects 🎬',
+            action: () => onNavigateToSection && onNavigateToSection('projects-section'),
+          },
+        ],
+      };
+    }
+
+    // 5. Graduation / Degree / Educational Qualification
+    if (
+      q.includes('completed his graduation') ||
+      q.includes('complete graduation') ||
+      q.includes('completed graduation') ||
+      q.includes('when he completed his graduation') ||
+      q.includes('when did he complete graduation') ||
+      q.includes('did he graduate') ||
+      q.includes('graduation') ||
       q.includes('degree') ||
+      q.includes('qualification') ||
       q.includes('education') ||
       q.includes('study') ||
       q.includes('school') ||
       q.includes('university')
     ) {
       return {
-        text: `Here is Jatin's Education & Learning Journey 🎓:\n\n• BCA Foundation & Bold Transition: Jatin initially enrolled in BCA (Bachelor of Computer Applications) to study computer science and software principles. However, discovering his deep passion for 3D CGI and visual storytelling, he made the deliberate decision to drop out of BCA and dedicate 100% of his focus to professional 3D Animation, VFX, and real-time graphics.\n\n• Specialized 3D & VFX Training: He completed intensive specialization in 3D Animation, VFX, and CGI, mastering Unreal Engine, Maya, Houdini, Substance 3D, and Nuke.\n\n• Unique Edge: His computer science background gives him a huge technical advantage in writing Houdini VEX expressions, Unreal Engine Blueprints, and troubleshooting complex real-time shader pipelines!`,
+        text: `Jatin’s Graduation & Educational Background 🎓:\n\n• Professional Specialization: Jatin completed comprehensive, intensive professional training in 3D Animation, VFX and CGI.\n\n• Complete Pipeline Mastery: His curriculum and hands-on production specialization covered Sub-D hard-surface modeling (Maya), procedural dynamics & fluids (Houdini), real-time rendering & cinematic lookdev (Unreal Engine 5), PBR texturing (Substance), and high-end color finishing (DaVinci Resolve / Nuke).\n\n• Industry-Ready Expertise: He graduated fully production-ready, combining 4+ years of broadcast media leadership with cutting-edge 3D technical direction.`,
         quickActions: [
           {
-            label: 'View Experience Highlights 🚀',
+            label: 'View Experience Highlights 📜',
             action: () => onNavigateToSection && onNavigateToSection('experience-section'),
           },
           {
@@ -332,22 +437,74 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       };
     }
 
-    // 4. Contact, WhatsApp, Phone Number, Email, How to Talk/Reach
+    // 6. WhatsApp Number / What is Jatin's WhatsApp
     if (
-      q.includes('contact') ||
       q.includes('whatsapp') ||
-      q.includes('phone') ||
-      q.includes('number') ||
-      q.includes('email') ||
-      q.includes('reach') ||
-      q.includes('talk') ||
-      q.includes('hire') ||
-      q.includes('message') ||
-      q.includes('call') ||
-      q.includes('connect')
+      q.includes('whats app') ||
+      q.includes('what is jatin\'s whatsapp') ||
+      q.includes('what is jatin whatsapp') ||
+      q.includes('whatsapp number')
     ) {
       return {
-        text: `Here is how you can connect with Jatin directly 📬:\n\n• Email: k.jatinofficial@gmail.com\n• ArtStation: artstation.com/allaboutjatin\n• Location: Noida (Delhi NCR), India\n• Phone / WhatsApp: To protect from web scrapers, Jatin shares his direct WhatsApp number and phone contact immediately upon receiving an email or dispatch request! Click below to send a note or request a call.\n• Response Time: Prompt, usually within 24 hours!`,
+        text: `Jatin’s WhatsApp Contact 💬:\n\n• Anti-Scraper Policy: To protect his personal direct line from automated web crawlers and spam bots, Jatin does not publish his raw WhatsApp number openly in plain text.\n• Immediate WhatsApp Dispatch: Jatin shares his direct WhatsApp number instantly upon receiving an inquiry via email (k.jatinofficial@gmail.com) or through the instant contact modal!\n\nClick below to open the contact form or send an email, and he’ll connect with you on WhatsApp right away!`,
+        quickActions: [
+          {
+            label: 'Open Contact Form 🚀',
+            action: () => onOpenContactModal(),
+          },
+          {
+            label: 'Email Jatin Directly ✉️',
+            action: () => {
+              window.location.href = 'mailto:k.jatinofficial@gmail.com?subject=WhatsApp%20Contact%20Request%20from%20Portfolio';
+            },
+          },
+        ],
+      };
+    }
+
+    // 7. Phone Number / Call / Mobile
+    if (
+      q.includes('number') ||
+      q.includes('phone') ||
+      q.includes('mobile') ||
+      q.includes('call') ||
+      q.includes('what is jatin\'s number') ||
+      q.includes('what is jatin number') ||
+      q.includes('telephone')
+    ) {
+      return {
+        text: `Jatin’s Phone & Direct Calling 📞:\n\n• For privacy and spam prevention, Jatin provides his direct mobile number immediately upon reviewing project inquiries or recruiter messages.\n• Official Email: k.jatinofficial@gmail.com\n• Quick Dispatch: Send a brief note through the contact modal or email with your number/project details, and Jatin will call or message you promptly!`,
+        quickActions: [
+          {
+            label: 'Open Contact Form 🚀',
+            action: () => onOpenContactModal(),
+          },
+          {
+            label: 'Send Email ✉️',
+            action: () => {
+              window.location.href = 'mailto:k.jatinofficial@gmail.com?subject=Call%20Request%20from%20Portfolio';
+            },
+          },
+        ],
+      };
+    }
+
+    // 8. Contact Jatin / How to talk to Jatin / How to talk to you / Email
+    if (
+      q.includes('contact') ||
+      q.includes('how to talk') ||
+      q.includes('talk to jatin') ||
+      q.includes('talk to you') ||
+      q.includes('reach') ||
+      q.includes('email') ||
+      q.includes('message') ||
+      q.includes('connect') ||
+      q.includes('hire') ||
+      q.includes('get in touch') ||
+      q.includes('how to reach')
+    ) {
+      return {
+        text: `How to Contact Jatin Directly 📬:\n\n• Email: k.jatinofficial@gmail.com\n• ArtStation: artstation.com/allaboutjatin\n• Location: Noida (Delhi NCR), India\n• Response Time: Usually within 24 hours!\n• Direct Chat/Call: Share your inquiry via the contact form or email, and Jatin will gladly provide his direct WhatsApp / Phone number for immediate discussion.`,
         quickActions: [
           {
             label: 'Open Contact Form 🚀',
@@ -363,19 +520,21 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       };
     }
 
-    // 5. Software, Skills, Tools, Pipeline
+    // 9. Software, Skills, Tools, Pipeline
     if (
       q.includes('skill') ||
       q.includes('software') ||
       q.includes('tool') ||
       q.includes('houdini') ||
       q.includes('unreal') ||
+      q.includes('ue5') ||
       q.includes('maya') ||
       q.includes('substance') ||
       q.includes('nuke') ||
       q.includes('davinci') ||
       q.includes('speedtree') ||
       q.includes('zbrush') ||
+      q.includes('blender') ||
       q.includes('tech stack')
     ) {
       return {
@@ -389,7 +548,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       };
     }
 
-    // 6. Projects & Showcase
+    // 10. Projects & Showcase
     if (
       q.includes('project') ||
       q.includes('redline') ||
@@ -400,7 +559,8 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       q.includes('work') ||
       q.includes('cinematic') ||
       q.includes('car') ||
-      q.includes('environment')
+      q.includes('environment') ||
+      q.includes('all projects')
     ) {
       return {
         text: `Featured 3D & Cinematic Projects 🎬:\n\n1. PROJECT REDLINE: Hypercar cinematic in Unreal Engine 5.6 featuring multi-layer clearcoat shaders, high-speed camera tracking, and full LookDev breakdown.\n2. MEXICANA: Atmospheric mid-century desert fuel station with dynamic sun god-rays, volumetric dust, and retro 35mm film grading.\n3. F1 UNREAL CINEMATIC: Class-A CAD conversion, aerodynamic CFD visualizer, and glowing carbon ceramic brake lookdev.\n4. BHARAT PETROLEUM (BPCL): Commercial product film with Houdini FLIP fluid fuel mechanics and broadcast studio lookdev.\n5. THE LOST CASTLE: Massive Nanite ancient citadel with dynamic SpeedTree wind and volumetric atmosphere.`,
@@ -410,24 +570,26 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
             action: () => onNavigateToSection && onNavigateToSection('projects-section'),
           },
           {
-            label: 'Watch 4K Showreel 🍿',
+            label: 'Watch 4K Cinematics 🍿',
             action: () => onNavigateToSection && onNavigateToSection('showreel-section'),
           },
         ],
       };
     }
 
-    // 7. Studio Experience, News Channels, Dignitaries
+    // 11. Studio Experience, News Channels, Dignitaries
     if (
       q.includes('experience') ||
       q.includes('news') ||
       q.includes('zee') ||
       q.includes('doordarshan') ||
       q.includes('president') ||
+      q.includes('governor') ||
       q.includes('broadcast') ||
       q.includes('studio') ||
       q.includes('history') ||
-      q.includes('past')
+      q.includes('past') ||
+      q.includes('subscribers')
     ) {
       return {
         text: `Jatin’s Studio & Broadcast Experience 🚀:\n\n• 4+ Years High-Pressure Media Production: Spanning live broadcast, photography, videography, post-production editing, podcasting, and multi-cam streaming.\n• National Dignitaries Coverage: Contributed to the media coverage of events attended by the former President of India, State Governors, Chief Ministers, and Bollywood personalities.\n• High-Scale Studio Leadership: Production Lead in a media production studio with 1.5M+ combined digital followers and subscribers.\n• Broadcast Networks Collaboration: Worked alongside teams from News Nation, Zee News, and Doordarshan.`,
@@ -444,7 +606,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       };
     }
 
-    // 8. Availability, Roles, Location, Salary, Freelance
+    // 12. Availability, Roles, Location, Salary, Freelance
     if (
       q.includes('availab') ||
       q.includes('job') ||
@@ -452,6 +614,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       q.includes('freelance') ||
       q.includes('full-time') ||
       q.includes('full time') ||
+      q.includes('contract') ||
       q.includes('remote') ||
       q.includes('relocat') ||
       q.includes('open to work') ||
@@ -472,7 +635,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       };
     }
 
-    // 9. Hardware & PC troubleshooting
+    // 13. Hardware & PC troubleshooting
     if (
       q.includes('pc') ||
       q.includes('hardware') ||
@@ -486,7 +649,28 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       };
     }
 
-    // 10. Greetings & Friendly banter
+    // 14. Rates & Pricing
+    if (
+      q.includes('price') ||
+      q.includes('pricing') ||
+      q.includes('rate') ||
+      q.includes('cost') ||
+      q.includes('charge') ||
+      q.includes('fee') ||
+      q.includes('budget')
+    ) {
+      return {
+        text: `Pricing & Project Quotations 💰:\n\n• Jatin provides tailored, competitive pricing depending on project scope, duration, complexity (Unreal cinematics, Houdini simulations, modeling), and deliverables.\n• Reach out with your brief to receive a customized estimate within 24 hours!`,
+        quickActions: [
+          {
+            label: 'Request a Quote 💌',
+            action: () => onOpenContactModal(),
+          },
+        ],
+      };
+    }
+
+    // 15. Greetings & Friendly banter
     if (
       q === 'hi' ||
       q === 'hello' ||
@@ -494,14 +678,21 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       q === 'namaste' ||
       q === 'hola' ||
       q.startsWith('hi ') ||
-      q.startsWith('hello ')
+      q.startsWith('hello ') ||
+      q.includes('how are you') ||
+      q.includes('whats up') ||
+      q.includes('what\'s up')
     ) {
       return {
-        text: `Hey there! 👻 What would you like to know about Jatin? I can tell you about his 3D projects, software skills, education journey, or how to get in touch with him!`,
+        text: `Hey there! 👻 What would you like to know about Jatin? I can tell you about his 3D projects, education journey & BCA transition, software skills, or how to get in touch with him!`,
         quickActions: [
           {
-            label: 'Projects 🎬',
-            action: () => onNavigateToSection && onNavigateToSection('projects-section'),
+            label: 'Who is Jatin? 👤',
+            action: () => handleSendMessage('Who is Jatin Kumar?'),
+          },
+          {
+            label: 'Education & BCA 🎓',
+            action: () => handleSendMessage('Tell me about Jatin’s education and BCA journey'),
           },
           {
             label: 'Contact Jatin 📬',
@@ -511,16 +702,37 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       };
     }
 
-    // 11. Graceful Intelligent Fallback
+    // 16. Polite Closing
+    if (
+      q.includes('thank') ||
+      q.includes('thanks') ||
+      q.includes('bye') ||
+      q.includes('goodbye') ||
+      q.includes('great') ||
+      q.includes('awesome') ||
+      q.includes('cool')
+    ) {
+      return {
+        text: `You're very welcome! ✨ Don't hesitate to reach out if you need anything else, or connect directly with Jatin at k.jatinofficial@gmail.com. Have a fantastic day! 🚀`,
+        quickActions: [
+          {
+            label: 'Contact Jatin 💌',
+            action: () => onOpenContactModal(),
+          },
+        ],
+      };
+    }
+
+    // 17. Graceful Intelligent Fallback (Exact phrasing requested)
     return {
-      text: `I don't know much about this context, but surely Jatin will! Feel free to reach out to him directly at k.jatinofficial@gmail.com or send a quick message through the contact modal. 💌\n\nIn the meantime, feel free to explore his projects, software toolchain, or 4K showreel!`,
+      text: `I don't know much about this context, but surely Jatin will! Feel free to reach out to him directly at k.jatinofficial@gmail.com or send a quick message through the contact modal. 💌\n\nIn the meantime, feel free to explore his projects, software toolchain, or 4K cinematics!`,
       quickActions: [
         {
           label: 'Contact Jatin Directly 💌',
           action: () => onOpenContactModal(),
         },
         {
-          label: 'View Showreel 🎬',
+          label: 'Watch Cinematics 🎬',
           action: () => onNavigateToSection && onNavigateToSection('showreel-section'),
         },
         {
@@ -548,6 +760,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
     setInputText('');
     setIsTyping(true);
 
+    // Thinking effect delay to let Duddu's thinking animations play
     setTimeout(() => {
       const { text: replyText, quickActions } = generateAnswer(text);
       const ghostMsg: ChatMessage = {
@@ -561,7 +774,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
       setMessages((prev) => [...prev, ghostMsg]);
       setIsTyping(false);
       soundFx.playChirp(750, 0.06, 0.02);
-    }, 650);
+    }, 750);
   };
 
   return (
@@ -616,17 +829,24 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
                   <div className="flex items-center gap-3">
                     {/* Mini Ghost Character in Header */}
                     <div className="w-10 h-12 relative shrink-0">
-                      <MeshGradientSVG interactive={false} />
+                      <MeshGradientSVG interactive={false} thinking={isTyping} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="text-sm font-bold text-white tracking-wide">
                           Duddu • AI Companion
                         </h3>
-                        <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-[9px] font-mono-code font-bold text-emerald-300 uppercase">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          Live
-                        </span>
+                        {isTyping ? (
+                          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-[9px] font-mono-code font-bold text-cyan-300 uppercase animate-pulse">
+                            <Sparkles className="w-2.5 h-2.5 text-amber-300 animate-spin" style={{ animationDuration: '3s' }} />
+                            Thinking...
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-[9px] font-mono-code font-bold text-emerald-300 uppercase">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            Live
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11px] text-slate-400 font-sans truncate">
                         Knowledge Base: Jatin Kumar • 3D & VFX
@@ -642,7 +862,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
                           {
                             id: `msg-reset-${Date.now()}`,
                             sender: 'ghost',
-                            text: `Chat refreshed! 👻 Ask me anything, I’ll respond if I know that...`,
+                            text: `Chat refreshed! 👻 Ask me anything, I’ll respond if I know that... ✨`,
                             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                           },
                         ]);
@@ -705,13 +925,22 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
                     </motion.div>
                   ))}
 
-                  {/* Ghost Typing Animation */}
+                  {/* Duddu Thinking Animation & Status */}
                   {isTyping && (
-                    <div className="flex items-center gap-1.5 p-3 rounded-2xl bg-[#12141e]/90 border border-white/10 max-w-[90px]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-2.5 p-2.5 px-3 rounded-2xl bg-[#12141e]/95 border border-cyan-500/30 max-w-[200px] shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                    >
+                      <div className="flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce shadow-[0_0_8px_#22d3ee]" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 rounded-full bg-purple-400 animate-bounce shadow-[0_0_8px_#c084fc]" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 rounded-full bg-pink-400 animate-bounce shadow-[0_0_8px_#f472b6]" style={{ animationDelay: '300ms' }} />
+                      </div>
+                      <span className="text-[11px] font-mono-code text-cyan-300 font-medium tracking-wide">
+                        Duddu is thinking...
+                      </span>
+                    </motion.div>
                   )}
                   <div ref={messagesEndRef} />
                 </div>
@@ -770,9 +999,9 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
 
             {/* Outer Circular Ring Badge Container - Larger Size */}
             <div className="relative w-20 sm:w-24 md:w-28 h-26 sm:h-30 md:h-34 p-1 flex items-center justify-center drop-shadow-2xl">
-              {/* Mesh Gradient Ghost Avatar with Interactive Mouse Tracking Eyes */}
+              {/* Mesh Gradient Ghost Avatar with Interactive Mouse Tracking Eyes & Thinking Effects */}
               <div className="w-full h-full">
-                <MeshGradientSVG interactive={true} />
+                <MeshGradientSVG interactive={true} thinking={isTyping} />
               </div>
 
               {/* Name Tag Pill - Larger and Prominent */}

@@ -4,7 +4,7 @@ import { BackgroundVfxCanvas } from './components/BackgroundVfxCanvas';
 import { HeaderNavbar } from './components/HeaderNavbar';
 import { HeroSection } from './components/HeroSection';
 import { ProjectsGrid } from './components/ProjectsGrid';
-import { ShowreelBreakdownSection } from './components/ShowreelBreakdownSection';
+import { CinematicShowcaseSection } from './components/CinematicShowcaseSection';
 import { PipelineAndSkills } from './components/PipelineAndSkills';
 import { AboutAndExperience } from './components/AboutAndExperience';
 import { RecruiterContactSection } from './components/RecruiterContactSection';
@@ -13,6 +13,7 @@ import { ContactModal } from './components/ContactModal';
 import { FooterHUD } from './components/FooterHUD';
 import { SideRays } from './components/SideRays';
 import { GhostAIAssistant } from './components/GhostAIAssistant';
+import { DynamicIsland } from './components/DynamicIsland';
 import { ProjectItem } from './types';
 import { PROJECTS_DATA } from './data/projectsData';
 import { MediaPlaybackProvider } from './context/MediaPlaybackContext';
@@ -22,6 +23,7 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [raysOpacity, setRaysOpacity] = useState(0);
+  const [showDynamicIsland, setShowDynamicIsland] = useState(false);
   const isProgrammaticScrollRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -107,9 +109,13 @@ export default function App() {
     };
   }, []);
 
-  // Track when hero section/prism leaves sight to fade in SideRays on the right
+  // Track when hero section/prism leaves sight to fade in SideRays on the right and trigger Apple Dynamic Island
   useEffect(() => {
     const handleScroll = () => {
+      // Dynamic Island appears after the hero window fullscreen expansion takes place
+      const scrolledPastHero = window.scrollY > 220;
+      setShowDynamicIsland(scrolledPastHero);
+
       const heroEl = document.getElementById('hero-section');
       if (!heroEl) return;
 
@@ -142,6 +148,9 @@ export default function App() {
           
           {/* Dynamic Parallax Background VFX Video & 3D Interactive Canvas */}
           <BackgroundVfxCanvas />
+
+          {/* Apple Dynamic Island with GLSL Siri Wave Effect */}
+          <DynamicIsland visible={showDynamicIsland} />
 
           {/* Right-Side Volumetric Light Rays (fades in as Hero Prism scrolls away) */}
           <div
@@ -183,8 +192,8 @@ export default function App() {
               onOpenContactModal={() => setIsContactModalOpen(true)}
             />
 
-            {/* 2. Interactive 2026 Showreel & Shot Breakdown Sheet */}
-            <ShowreelBreakdownSection
+            {/* 2. 4K Cinematic Sequence Showcase */}
+            <CinematicShowcaseSection
               onOpenProjectById={(projectId) => {
                 const found = PROJECTS_DATA.find((p) => p.id === projectId);
                 if (found) setSelectedProject(found);

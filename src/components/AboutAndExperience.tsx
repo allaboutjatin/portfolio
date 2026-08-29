@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { motion, useInView } from 'motion/react';
 import { 
   MapPin, 
   Sparkles,
@@ -23,11 +24,45 @@ const ORB_PRESETS = [
   { name: 'Violet', hue: 270, speed: 0.25, label: '04' },
 ];
 
+interface LavenderHighlightProps {
+  children: React.ReactNode;
+  active: boolean;
+  delay?: number;
+}
+
+const LavenderHighlight: React.FC<LavenderHighlightProps> = ({ children, active, delay = 0 }) => {
+  return (
+    <motion.span
+      initial={{ backgroundSize: '0% 100%', color: '#f8fafc' }}
+      animate={
+        active
+          ? { backgroundSize: '100% 100%', color: '#09090b' }
+          : { backgroundSize: '0% 100%', color: '#f8fafc' }
+      }
+      transition={{
+        duration: 0.65,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="inline font-bold px-1.5 py-0.5 rounded-[4px] [box-decoration-break:clone] [-webkit-box-decoration-break:clone] bg-no-repeat bg-left transition-colors duration-300"
+      style={{
+        backgroundImage: 'linear-gradient(to right, #d8b4fe, #c4b5fd)',
+      }}
+    >
+      {children}
+    </motion.span>
+  );
+};
+
 export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
   onOpenContactModal
 }) => {
   const [activePresetIndex, setActivePresetIndex] = useState(0);
   const activePreset = ORB_PRESETS[activePresetIndex];
+  
+  const bioRef = useRef<HTMLDivElement>(null);
+  const isBioInView = useInView(bioRef, { once: true, margin: '-60px' });
+
   return (
     <section id="about-section" className="py-12 sm:py-20 relative z-10 bg-black text-white border-t border-white/10 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +83,7 @@ export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
           
           {/* Bio Narrative Card (8 Cols) */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-8" ref={bioRef}>
             <BorderGlow
               borderRadius={20}
               glowRadius={30}
@@ -84,19 +119,43 @@ export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
                   </p>
 
                   <p>
-                    My main focus is <span className="text-white font-semibold">Unreal Engine 5, Houdini, and real-time cinematic workflows</span> 🎬✨. I enjoy building environments, creating cinematic experiences, developing procedural assets, and exploring VFX and technical workflows for interactive and cinematic projects.
+                    My main focus is{' '}
+                    <LavenderHighlight active={isBioInView} delay={0.15}>
+                      Unreal Engine 5, Houdini, and real-time cinematic workflows
+                    </LavenderHighlight>{' '}
+                    🎬✨. I enjoy building environments, creating cinematic experiences, developing procedural assets, and exploring VFX and technical workflows for interactive and cinematic projects.
                   </p>
 
                   <p>
-                    Before moving into 3D, I spent <span className="text-white font-semibold">4+ years in media production</span>, working across live events, photography, videography, editing, podcast production, and live streaming. I’ve had the opportunity to work with teams from <span className="text-sky-300 font-medium">News Nation, Zee News, Doordarshan</span>, and other media organisations, while also working alongside news anchors and production professionals.
+                    Before moving into 3D, I spent{' '}
+                    <LavenderHighlight active={isBioInView} delay={0.4}>
+                      4+ years in media production
+                    </LavenderHighlight>
+                    , working across live events, photography, videography, editing, podcast production, and live streaming. I’ve had the opportunity to work with teams from{' '}
+                    <LavenderHighlight active={isBioInView} delay={0.65}>
+                      News Nation, Zee News, Doordarshan
+                    </LavenderHighlight>
+                    , and other media organisations, while also working alongside news anchors and production professionals.
                   </p>
 
                   <p>
-                    I’ve contributed to the production and coverage of national-level events attended by distinguished guests, including the <span className="text-white font-medium">former President of India, State Governors, Chief Ministers, Deputy Chief Ministers, Bollywood personalities</span>, and other public figures.
+                    I’ve contributed to the production and coverage of national-level events attended by distinguished guests, including the{' '}
+                    <LavenderHighlight active={isBioInView} delay={0.9}>
+                      former President of India, State Governors, Chief Ministers, Deputy Chief Ministers, Bollywood personalities
+                    </LavenderHighlight>
+                    , and other public figures.
                   </p>
 
                   <p>
-                    I’m also part of a production studio with a combined audience of <span className="text-amber-300 font-medium">1.5M+ followers and subscribers</span> across multiple digital platforms. Working in that environment taught me how to handle tight deadlines, adapt quickly, collaborate across creative and technical teams, and <span className="text-white font-medium">most importantly</span> figure things out when there isn’t a manual.
+                    I’m also part of a production studio with a combined audience of{' '}
+                    <LavenderHighlight active={isBioInView} delay={1.15}>
+                      1.5M+ followers and subscribers
+                    </LavenderHighlight>{' '}
+                    across multiple digital platforms. Working in that environment taught me how to handle tight deadlines, adapt quickly, collaborate across creative and technical teams, and{' '}
+                    <LavenderHighlight active={isBioInView} delay={1.35}>
+                      most importantly
+                    </LavenderHighlight>{' '}
+                    figure things out when there isn’t a manual.
                   </p>
 
                   <p>

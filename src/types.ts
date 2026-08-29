@@ -49,19 +49,8 @@ export interface ProjectItem {
   overview: string;
   technicalHighlights: string[];
   supervisorReview?: string;
-  breakdownPipeline: BreakdownStep[];
+  breakdownPipeline?: BreakdownStep[];
   nodeGraphNotes?: string;
-}
-
-export interface ShowreelShot {
-  timestamp: string; // "00:04 - 00:12"
-  timeInSeconds: number;
-  shotTitle: string;
-  projectRefId: string;
-  disciplines: string[];
-  software: string[];
-  description: string;
-  thumbnail: string;
 }
 
 export interface SoftwareSkill {

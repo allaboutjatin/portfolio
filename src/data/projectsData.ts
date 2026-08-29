@@ -1,4 +1,4 @@
-import { ProjectItem, ShowreelShot, SoftwareSkill } from '../types';
+import { ProjectItem, SoftwareSkill } from '../types';
 import f1SunsetThumbnail from '../assets/images/f1_car_sunset_1787301512500.jpg';
 
 export const PROJECTS_DATA: ProjectItem[] = [
@@ -101,37 +101,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Configured warm sunset directional lighting paired with glowing neon tube emissives bouncing via Lumen real-time GI.',
       'Graded in DaVinci Resolve to achieve a warm 35mm retro cinematic film look with custom optical halation and grain.'
     ],
-    supervisorReview: '"Superb environmental mood and lighting contrast. The transition from intense desert sun to the neon shadows of the fuel station tells a compelling cinematic story." – Environment Lead',
-    breakdownPipeline: [
-      {
-        id: 'mex-1',
-        name: '01. Desert Environment Blockout & Landscape',
-        description: 'Terrain sculpting with slope-based sand, cracked earth, and asphalt materials blended via Runtime Virtual Texturing (RVT).',
-        software: ['Unreal Engine 5', 'Gaea'],
-        imageUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'mex-2',
-        name: '02. Gas Station Hard-Surface Asset Creation',
-        description: 'Modeling vintage fuel pumps, signage, and rusted metal awnings with multi-UDIM procedural rust masks in Substance Painter.',
-        software: ['Autodesk Maya', 'Substance Painter'],
-        imageUrl: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'mex-3',
-        name: '03. Lighting & Volumetric Atmosphere',
-        description: 'Golden hour directional sunlight with volumetric fog inscattering, dusty heat mirage effects, and neon illumination.',
-        software: ['Unreal Engine 5', 'Lumen'],
-        imageUrl: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'mex-4',
-        name: '04. Cinematic Sequencing & Film Emulation',
-        description: 'Camera composition, slow panning shots, motion blur calibration, and 35mm vintage film stock color grade.',
-        software: ['UE5 Sequencer', 'DaVinci Resolve'],
-        imageUrl: 'https://img.youtube.com/vi/c7j6qtnMbQU/maxresdefault.jpg'
-      }
-    ]
+    supervisorReview: '"Superb environmental mood and lighting contrast. The transition from intense desert sun to the neon shadows of the fuel station tells a compelling cinematic story." – Environment Lead'
   },
   {
     id: 'f1-unreal-cinematic',
@@ -163,36 +133,6 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Virtual camera sensor matching real-world broadcast trackside telephoto rigs with realistic focal breathing and motion blur.'
     ],
     supervisorReview: '"Currently in active production. Initial lookdev frames and high-speed camera choreographies demonstrate cutting-edge Unreal Engine 5.6 motorsport realism." – Studio Production Lead',
-    breakdownPipeline: [
-      {
-        id: 'f1-1',
-        name: '01. F1 Chassis CAD Optimization & Aero Sub-D',
-        description: 'Aerodynamic surface modeling in Maya with zero surface distortion across complex compound curvature curves.',
-        software: ['Autodesk Maya', 'Sub-D Tools'],
-        imageUrl: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'f1-2',
-        name: '02. Carbon Fiber & Livery LookDev',
-        description: 'Multi-layer composite material texturing in Substance Painter featuring gloss clearcoat, satin carbon, and heat-resistant alloys.',
-        software: ['Substance 3D Painter', 'Substance Designer'],
-        imageUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'f1-3',
-        name: '03. Unreal Engine 5.6 Lumen Lighting & Track Setup',
-        description: 'High-speed track environment lighting with Lumen hardware ray tracing, asphalt rubber textures, and volumetric tire smoke.',
-        software: ['Unreal Engine 5.6', 'Lumen GI'],
-        imageUrl: f1SunsetThumbnail
-      },
-      {
-        id: 'f1-4',
-        name: '04. Sequencing & Final Post Finishing',
-        description: 'Multi-camera track tracking in Sequencer and linear EXR mastering in DaVinci Resolve Studio with ACEScg color science.',
-        software: ['UE5 Sequencer', 'DaVinci Resolve'],
-        imageUrl: f1SunsetThumbnail
-      }
-    ],
     nodeGraphNotes: 'Unreal Engine 5.6 Master Shader: Dynamic Carbon Fiber Weave with Anisotropic Highlight Rotation and Thermal Brake Glow Emissive Driver.'
   },
   {
@@ -225,37 +165,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Commercial studio look development with clean chrome reflections, branded vibrant decals, and macro depth-of-field closeups.',
       'Final broadcast mastering adhering to broadcast color specifications and dynamic camera choreography.'
     ],
-    supervisorReview: '"Clean, crisp commercial execution. The product lighting and polished material finishes meet highest agency broadcast standards." – Commercial VFX Producer',
-    breakdownPipeline: [
-      {
-        id: 'bpcl-1',
-        name: '01. Industrial Model Optimization',
-        description: 'CAD cleanup and subdivision mesh conversion for high-tolerance mechanical pump components.',
-        software: ['Autodesk Maya', 'CAD Converter'],
-        imageUrl: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'bpcl-2',
-        name: '02. Fluid Dynamics & Droplet Simulation',
-        description: 'Houdini FLIP fluid simulation for fuel droplet flow through transparent delivery nozzles.',
-        software: ['SideFX Houdini 20', 'VEX'],
-        imageUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=85'
-      },
-      {
-        id: 'bpcl-3',
-        name: '03. Brand Shading & Studio Lighting',
-        description: 'Calibrated PBR shaders for BPCL brand colors, brushed aluminum, and optical glass refractions.',
-        software: ['Substance 3D Painter', 'Unreal Engine 5'],
-        imageUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'bpcl-4',
-        name: '04. Commercial Motion Design & Compositing',
-        description: 'Multi-pass compositing in Nuke with optical flares, typography integration, and broadcast audio mix.',
-        software: ['Foundry Nuke', 'After Effects'],
-        imageUrl: 'https://img.youtube.com/vi/oQ7BbQ32yuE/maxresdefault.jpg'
-      }
-    ]
+    supervisorReview: '"Clean, crisp commercial execution. The product lighting and polished material finishes meet highest agency broadcast standards." – Commercial VFX Producer'
   },
   {
     id: 'the-lost-castle',
@@ -288,37 +198,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Designed volumetric exponential height fog with directional inscattering and dramatic god rays cutting through cloud cover.',
       'Choreographed sweeping aerial drone shots with smooth spline interpolation and cinematic anamorphic lens distortion.'
     ],
-    supervisorReview: '"Awe-inspiring architectural scale and atmosphere. The volumetric light shafts cutting through the castle ruins create incredible emotional depth." – Principal Cinematic Artist',
-    breakdownPipeline: [
-      {
-        id: 'castle-1',
-        name: '01. Architectural Blockout & Cliff Geometry',
-        description: 'Modular castle kitbash pieces sculpted in ZBrush and assembled along dramatic mountain ridges in Maya.',
-        software: ['ZBrush', 'Maya'],
-        imageUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'castle-2',
-        name: '02. Procedural Stone Masonry & Moss Shaders',
-        description: 'Tiling weathered stone materials created in Substance Designer with vertex-painted moss and dirt occlusion.',
-        software: ['Substance 3D Designer'],
-        imageUrl: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'castle-3',
-        name: '03. Nanite Instancing & Foliage Scattering',
-        description: 'Dense procedural ivy, mountain pine trees, and grass clumps scattered using Unreal Engine PCG tools.',
-        software: ['Unreal Engine 5 (Nanite & PCG)'],
-        imageUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=85'
-      },
-      {
-        id: 'castle-4',
-        name: '04. Volumetric Sun Shafts & Epic Camera Splines',
-        description: 'Lumen real-time GI with high-altitude atmospheric fog and cinematic slow-motion drone flythroughs.',
-        software: ['UE5 Sequencer', 'DaVinci Resolve'],
-        imageUrl: 'https://img.youtube.com/vi/3OX753L0sIg/maxresdefault.jpg'
-      }
-    ]
+    supervisorReview: '"Awe-inspiring architectural scale and atmosphere. The volumetric light shafts cutting through the castle ruins create incredible emotional depth." – Principal Cinematic Artist'
   },
   {
     id: 'the-beach',
@@ -350,90 +230,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
       'Engineered underwater caustic light refraction projections dancing on submerged sea floor rocks and coral geometry.',
       'Real-time natural sun and sky daylight lighting using physical atmospheric transmittance and Rayleigh scattering.'
     ],
-    supervisorReview: '"Incredible water caustics and shoreline shader transitions. The sense of natural sunlight on coastal water is strikingly photorealistic." – Technical Art Director',
-    breakdownPipeline: [
-      {
-        id: 'beach-1',
-        name: '01. Ocean Water Shader & Wave Physics',
-        description: 'Single Layer Water shader graph with dual normal spectrums for large rolling swells and high-frequency capillary ripples.',
-        software: ['Unreal Engine 5 Material Graph'],
-        imageUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'beach-2',
-        name: '02. Underwater Caustics & Optical Absorption',
-        description: 'Procedural caustic light projection functions with depth-dependent water light absorption and light scattering.',
-        software: ['Unreal Engine 5', 'Houdini'],
-        imageUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 'beach-3',
-        name: '03. Coastal Foliage & Wet Sand Wetness Masks',
-        description: 'Dynamic shoreline wave wash with distance-field wetness masks and wind-blown coastal palm vegetation.',
-        software: ['SpeedTree', 'Quixel Megascans'],
-        imageUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=85'
-      },
-      {
-        id: 'beach-4',
-        name: '04. Natural Daylight Lighting & ACES Color',
-        description: 'Physical Sun & Sky atmospheric lighting, camera depth of field, and DaVinci Resolve ACEScg master grade.',
-        software: ['Unreal Engine 5', 'DaVinci Resolve'],
-        imageUrl: 'https://img.youtube.com/vi/mwZ8coCUlPI/maxresdefault.jpg'
-      }
-    ]
-  }
-];
-
-export const SHOWREEL_SHOTS: ShowreelShot[] = [
-  {
-    timestamp: '00:00 - 00:08',
-    timeInSeconds: 0,
-    shotTitle: 'Project REDLINE - UE 5.6 Hypercar Speed Run',
-    projectRefId: 'project-redline',
-    disciplines: ['Unreal Engine 5.6', 'Automotive CGI', 'Lumen LookDev'],
-    software: ['Unreal Engine 5.6', 'Maya', 'Substance Painter', 'DaVinci Resolve'],
-    description: 'High-speed hypercar cinematic tracking shot featuring clearcoat flake dispersion, dynamic wheel physics, and asphalt reflections.',
-    thumbnail: 'https://img.youtube.com/vi/FTV57q6M0j4/maxresdefault.jpg'
-  },
-  {
-    timestamp: '00:08 - 00:15',
-    timeInSeconds: 8,
-    shotTitle: 'Mexicana - Desert Fuel Station & Classic Muscle',
-    projectRefId: 'mexicana-desert-fuel',
-    disciplines: ['Environment Art', 'Lighting', 'Retro Film Grade'],
-    software: ['Unreal Engine 5', 'Quixel Megascans', 'Maya', 'DaVinci Resolve'],
-    description: 'Atmospheric golden hour pan across a weathered mid-century desert gas station with dusty wind particles and neon glow.',
-    thumbnail: 'https://img.youtube.com/vi/c7j6qtnMbQU/maxresdefault.jpg'
-  },
-  {
-    timestamp: '00:15 - 00:23',
-    timeInSeconds: 15,
-    shotTitle: 'Bharat Petroleum (BPCL) - Commercial Product CGI',
-    projectRefId: 'bharat-petroleum-bpcl',
-    disciplines: ['Commercial VFX', 'Houdini Fluid Sim', 'Product LookDev'],
-    software: ['Unreal Engine 5', 'Houdini 20', 'Maya', 'Nuke 15'],
-    description: 'Broadcast commercial shot featuring precision fuel dispenser mechanics, fluid flow dynamics, and sleek studio lighting.',
-    thumbnail: 'https://img.youtube.com/vi/oQ7BbQ32yuE/maxresdefault.jpg'
-  },
-  {
-    timestamp: '00:23 - 00:31',
-    timeInSeconds: 23,
-    shotTitle: 'The Lost Castle - Ancient Citadel Ruins & Fog',
-    projectRefId: 'the-lost-castle',
-    disciplines: ['Nanite Virtualized Geo', 'Volumetric Lighting', 'Sequencer'],
-    software: ['Unreal Engine 5', 'ZBrush', 'SpeedTree', 'Maya'],
-    description: 'Sweeping aerial crane shot past towering moss-covered gothic fortress walls with volumetric sunlight rays piercing cloud cover.',
-    thumbnail: 'https://img.youtube.com/vi/3OX753L0sIg/maxresdefault.jpg'
-  },
-  {
-    timestamp: '00:31 - 00:38',
-    timeInSeconds: 31,
-    shotTitle: 'The Beach - Photoreal Ocean Waves & Caustics',
-    projectRefId: 'the-beach',
-    disciplines: ['Single Layer Water', 'Caustic Optics', 'Atmospheric Daylight'],
-    software: ['Unreal Engine 5', 'Houdini', 'SpeedTree', 'DaVinci Resolve'],
-    description: 'Coastal shoreline cinematic with dynamic wave foam breaks, underwater caustic refractions, and wet sand specular transitions.',
-    thumbnail: 'https://img.youtube.com/vi/mwZ8coCUlPI/maxresdefault.jpg'
+    supervisorReview: '"Incredible water caustics and shoreline shader transitions. The sense of natural sunlight on coastal water is strikingly photorealistic." – Technical Art Director'
   }
 ];
 

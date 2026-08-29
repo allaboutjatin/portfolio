@@ -29,7 +29,15 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
     polycount: '1.85M Polygons (Subdivision Surfaces & Nanite Mesh)',
     renderEngine: 'Unreal Engine 5.6 (Lumen, MRQ & Sub-Surface Paint)',
-    softwareStack: ['Unreal Engine 5.6', 'Autodesk Maya', 'Substance 3D Painter', 'DaVinci Resolve Studio', 'Foundry Nuke'],
+    softwareStack: [
+      'Unreal Engine 5',
+      'Autodesk Maya',
+      'Adobe Photoshop',
+      'Adobe Premiere Pro',
+      'Sketchfab',
+      'Ableton Live Suite 12',
+      'Quixel Megascans'
+    ],
     overview: 'High-octane automotive cinematic created in Unreal Engine 5.6 showcasing photorealistic supercar paint shaders, dynamic high-speed camera tracking, custom Lumen bounce lighting, and realistic wheel physics. Includes an extensive step-by-step breakdown and BTS video.',
     technicalHighlights: [
       'Authored multi-coat clearcoat automotive shaders with dynamic anisotropic reflection flakes and heat-tinted carbon fiber textures.',
@@ -93,7 +101,15 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
     polycount: '4.2M Nanite Meshes & Dense Foliage Instances',
     renderEngine: 'Unreal Engine 5 (Lumen + Nanite)',
-    softwareStack: ['Unreal Engine 5', 'Quixel Megascans', 'Substance 3D Painter', 'Autodesk Maya', 'DaVinci Resolve'],
+    softwareStack: [
+      'Unreal Engine 5',
+      'DaVinci Resolve Studio',
+      'Adobe Premiere Pro',
+      'Blender',
+      'Sketchfab',
+      'Autodesk Maya',
+      'Adobe Photoshop'
+    ],
     overview: 'A gritty, atmospheric desert gas station automotive cinematic rendered in Unreal Engine 5. Explores dusty arid lighting, weathered neon signage, heat distortion, octane-fueled reflections, and realistic environmental storytelling.',
     technicalHighlights: [
       'Modeled and textured a weathered mid-century desert gas station with layered grunge, peeling paint, and rusted metal trims.',
@@ -157,7 +173,15 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
     polycount: '620K Quads (Class-A Precision CAD / Sub-D Mesh)',
     renderEngine: 'Unreal Engine 5 & Karma XPU',
-    softwareStack: ['Unreal Engine 5', 'SideFX Houdini', 'Autodesk Maya', 'Substance 3D Painter', 'After Effects', 'Nuke'],
+    softwareStack: [
+      'Unreal Engine 5',
+      'Adobe Premiere Pro',
+      'Autodesk 3ds Max',
+      'Autodesk Maya',
+      'Autodesk AutoCAD',
+      'Adobe Photoshop',
+      'Quixel Megascans'
+    ],
     overview: 'Commercial 3D production for Bharat Petroleum (BPCL). Features high-precision fuel dispensing mechanics, viscous fluid dynamics, sleek corporate brand lighting, and broadcast-ready commercial motion design.',
     technicalHighlights: [
       'High-precision CAD model cleanup and Sub-D optimization for industrial fuel dispensers and pump nozzles.',
@@ -190,7 +214,12 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
     polycount: '12.4M Triangles (Nanite Virtualized Geometry)',
     renderEngine: 'Unreal Engine 5 (Lumen + Nanite + Virtual Shadow Maps)',
-    softwareStack: ['Unreal Engine 5', 'ZBrush', 'SpeedTree Cinema', 'Substance 3D Designer', 'Maya', 'DaVinci Resolve'],
+    softwareStack: [
+      'Unreal Engine 5',
+      'Adobe Photoshop',
+      'Adobe Premiere Pro',
+      'Quixel Megascans'
+    ],
     overview: 'An epic cinematic journey into an ancient forgotten stone castle perched on mist-shrouded mountain cliffs. Features dense ivy foliage, ancient masonry displacement, volumetric sun shafts, and sweeping aerial camera maneuvers in Unreal Engine.',
     technicalHighlights: [
       'Constructed massive ancient gothic ruins using Nanite geometry for infinite LOD transitions with zero pop-in.',
@@ -222,7 +251,12 @@ export const PROJECTS_DATA: ProjectItem[] = [
     },
     polycount: '8.6M Instanced Foliage & Water Surface Mesh',
     renderEngine: 'Unreal Engine 5 (Lumen + Single Layer Water Shading)',
-    softwareStack: ['Unreal Engine 5', 'Houdini Ocean Spectrum', 'Quixel Megascans', 'Substance 3D Painter', 'DaVinci Resolve'],
+    softwareStack: [
+      'Unreal Engine 5',
+      'Adobe Photoshop',
+      'Adobe Premiere Pro',
+      'Quixel Megascans'
+    ],
     overview: 'A photorealistic coastal beach environment cinematic capturing gentle wave breaks, underwater caustic light patterns, wet sand specular transitions, and pristine coastal atmosphere under natural daylight.',
     technicalHighlights: [
       'Implemented Unreal Engine Single Layer Water system with custom Gerstner wave displacement and dynamic foam shorelines.',

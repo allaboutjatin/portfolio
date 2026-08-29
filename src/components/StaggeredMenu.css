@@ -416,6 +416,11 @@
     gap: 0.5rem;
   }
   .sm-socials-list {
-    gap: 0.75rem 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem 1rem;
+  }
+  .sm-socials-link {
+    font-size: 0.85rem;
   }
 }

@@ -207,27 +207,36 @@ export const PipelineAndSkills: React.FC = () => {
       badge: 'CELEBRITY & BROADCAST TALENT',
       icon: Users,
       title: 'Celebrities & Renowned Public Figures',
-      desc: 'Collaborated with distinguished news anchors and celebrities including Ashutosh Rana, Manoj Joshi, Aalok Shrivastav, Ashmita Singh Rajput, Shalini Kapoor Tiwari, Rana Yashwant and many more.',
+      desc: 'Contributed to the production and coverage of national-level events attended by distinguished guests, including the former President of India, Governors of states, Chief Ministers, Deputy Chief Ministers, Bollywood personalities, and other notable public figures. Additionally, collaborated with distinguished news anchors and celebrities across various professional projects, including Ashutosh Rana, Manoj Joshi, Aalok Shrivastav, Ashmita Singh Rajput, Shalini Kapoor Tiwari, Rana Yashwant, and many more.',
       accent: 'border-amber-500/40 text-amber-300 bg-amber-500/10',
-      glowColors: ['#fbbf24', '#f59e0b', '#d97706'] as [string, string, string]
+      glowColors: ['#fbbf24', '#f59e0b', '#d97706'] as [string, string, string],
+      colSpan: 'col-span-1 lg:col-span-7',
+      borderRadius: 20,
+      paddingClass: 'p-4.5 sm:p-8'
     },
     {
       id: 'news-channels',
       badge: 'NATIONAL BROADCAST TEAMS',
       icon: Tv,
       title: 'Leading News Network Productions',
-      desc: 'Collaborated and executed high-pressure live broadcasting, production shoots, and editing pipelines alongside teams from Zee News, Bharat Express, News Nation, Doordarshan, and more.',
+      desc: 'Collaborated with prominent broadcast media organizations to support the execution of high-pressure live broadcasts, production shoots, and end-to-end post-production workflows. Worked alongside teams from Zee News, Bharat Express, News Nation, Doordarshan, and other established media networks, contributing to the seamless delivery of time-sensitive, high-profile, and large-scale productions.',
       accent: 'border-sky-500/40 text-sky-300 bg-sky-500/10',
-      glowColors: ['#38bdf8', '#0284c7', '#2563eb'] as [string, string, string]
+      glowColors: ['#38bdf8', '#0284c7', '#2563eb'] as [string, string, string],
+      colSpan: 'col-span-1 lg:col-span-5',
+      borderRadius: 18,
+      paddingClass: 'p-4 sm:p-7'
     },
     {
       id: 'rashtrapati-bhavan',
       badge: 'GOVERNMENT & NATIONAL EVENT',
       icon: Landmark,
-      title: 'Rashtrapati Bhavan (Amrit Udyan)',
-      desc: "Partnered with the Ministry of Social Justice and Empowerment for a large-scale event held at Rashtrapati Bhavan's Amrit Udyan, contributing to the successful execution and comprehensive coverage of an event attended by over 11,550 visitors.",
+      title: 'Major Event Production & Coverage',
+      desc: 'Contributed to the production and comprehensive media coverage of major events held at prestigious venues, including Rashtrapati Bhavan, Vigyan Bhavan, and other prominent locations. Partnered with the Ministry of Social Justice and Empowerment for a large-scale event at Rashtrapati Bhavan’s Amrit Udyan, attended by over 11,550 visitors.',
       accent: 'border-emerald-500/40 text-emerald-300 bg-emerald-500/10',
-      glowColors: ['#10b981', '#34d399', '#059669'] as [string, string, string]
+      glowColors: ['#10b981', '#34d399', '#059669'] as [string, string, string],
+      colSpan: 'col-span-1 lg:col-span-5',
+      borderRadius: 18,
+      paddingClass: 'p-4 sm:p-7'
     },
     {
       id: 'digital-audience',
@@ -240,7 +249,10 @@ export const PipelineAndSkills: React.FC = () => {
         { label: 'Instagram Community', val: '300K+' }
       ],
       accent: 'border-rose-500/40 text-rose-300 bg-rose-500/10',
-      glowColors: ['#f43f5e', '#fb7185', '#be123c'] as [string, string, string]
+      glowColors: ['#f43f5e', '#fb7185', '#be123c'] as [string, string, string],
+      colSpan: 'col-span-1 lg:col-span-7',
+      borderRadius: 20,
+      paddingClass: 'p-4.5 sm:p-8'
     }
   ];
 
@@ -503,58 +515,59 @@ export const PipelineAndSkills: React.FC = () => {
           </div>
         </div>
 
-        {/* 4 Cards Grid with subtle vibrant accent colors */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        {/* Uneven, Asymmetrical Bento Grid sized to content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
           {experienceHighlights.map((exp) => {
             const IconComponent = exp.icon;
             return (
-              <BorderGlow
-                key={exp.id}
-                borderRadius={20}
-                glowRadius={30}
-                edgeSensitivity={28}
-                glowIntensity={1.0}
-                backgroundColor="#0b0b0e"
-                colors={exp.glowColors}
-                onMouseEnter={() => soundFx.playHover()}
-                className="shadow-2xl group transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <div className="p-5 sm:p-8 flex flex-col justify-between h-full">
-                  <div>
-                    <div className="flex items-center justify-between mb-3 sm:mb-4">
-                      <span className={`text-[9px] sm:text-[10px] font-mono-code font-bold uppercase tracking-wider px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border ${exp.accent}`}>
-                        {exp.badge}
-                      </span>
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      </div>
-                    </div>
-
-                    <h4 className="text-base sm:text-xl font-display font-bold text-white mb-2 sm:mb-3">
-                      {exp.title}
-                    </h4>
-
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                      {exp.desc}
-                    </p>
-                  </div>
-
-                  {exp.stats && (
-                    <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-4 sm:mt-6 pt-4 sm:pt-5 border-t border-white/10">
-                      {exp.stats.map((s, idx) => (
-                        <div key={idx} className="bg-white/5 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-white/10">
-                          <span className="text-lg sm:text-2xl font-display font-black text-white block">
-                            {s.val}
-                          </span>
-                          <span className="text-[10px] sm:text-[11px] font-mono-code text-slate-300">
-                            {s.label}
-                          </span>
+              <div key={exp.id} className={`${exp.colSpan} flex flex-col`}>
+                <BorderGlow
+                  borderRadius={exp.borderRadius || 20}
+                  glowRadius={32}
+                  edgeSensitivity={28}
+                  glowIntensity={1.0}
+                  backgroundColor="#0b0b0e"
+                  colors={exp.glowColors}
+                  onMouseEnter={() => soundFx.playHover()}
+                  className="shadow-2xl group transition-transform duration-300 hover:-translate-y-0.5 h-full"
+                >
+                  <div className={`${exp.paddingClass || 'p-5 sm:p-8'} flex flex-col justify-between h-full`}>
+                    <div>
+                      <div className="flex items-center justify-between mb-2.5 sm:mb-4">
+                        <span className={`text-[8.5px] sm:text-[10px] font-mono-code font-bold uppercase tracking-wider px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border ${exp.accent}`}>
+                          {exp.badge}
+                        </span>
+                        <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                          <IconComponent className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
                         </div>
-                      ))}
+                      </div>
+
+                      <h4 className="text-sm sm:text-xl lg:text-2xl font-display font-bold text-white mb-1.5 sm:mb-3">
+                        {exp.title}
+                      </h4>
+
+                      <p className="text-[11.5px] sm:text-sm text-slate-300 leading-relaxed font-normal">
+                        {exp.desc}
+                      </p>
                     </div>
-                  )}
-                </div>
-              </BorderGlow>
+
+                    {exp.stats && (
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3.5 mt-3.5 sm:mt-5 pt-3 sm:pt-5 border-t border-white/10">
+                        {exp.stats.map((s, idx) => (
+                          <div key={idx} className="bg-white/5 p-2.5 sm:p-4 rounded-lg sm:rounded-2xl border border-white/10">
+                            <span className="text-lg sm:text-2xl font-display font-black text-white block">
+                              {s.val}
+                            </span>
+                            <span className="text-[9px] sm:text-[11px] font-mono-code text-slate-300">
+                              {s.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </BorderGlow>
+              </div>
             );
           })}
         </div>

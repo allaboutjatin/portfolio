@@ -130,32 +130,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center items-center text-center mt-2 sm:mt-6 pointer-events-auto">
           
           {/* Liquid Glass Capsule Tab */}
-          <div className="mb-3 sm:mb-5 pointer-events-auto flex items-center justify-center">
+          <div className="mb-2.5 sm:mb-5 pointer-events-auto flex items-center justify-center">
             <LiquidButton
               onClick={() => soundFx.playClick()}
-              className="h-auto py-1 sm:py-2.5 px-3 sm:px-6 rounded-full shadow-2xl backdrop-blur-xl transition-all duration-300 max-w-[95vw]"
+              className="h-auto py-1 sm:py-2.5 px-2.5 xs:px-3.5 sm:px-6 rounded-full shadow-2xl backdrop-blur-xl transition-all duration-300 max-w-[95vw]"
             >
-              <div className="flex flex-wrap items-center justify-center gap-1.5 xs:gap-2 sm:gap-4 text-[10px] xs:text-[11px] sm:text-sm font-mono-code text-slate-200">
+              <div className="flex flex-wrap items-center justify-center gap-1 xs:gap-2 sm:gap-4 text-[8.5px] xs:text-[10px] sm:text-sm font-mono-code text-slate-200">
                 <span className="inline-flex items-center gap-1 sm:gap-1.5 font-semibold tracking-wider uppercase whitespace-nowrap">
-                  <svg className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-white drop-shadow-[0_0_4px_rgba(255,255,255,0.7)] shrink-0" viewBox="0 0 24 24">
+                  <svg className="w-2 h-2 sm:w-3.5 sm:h-3.5 fill-white drop-shadow-[0_0_4px_rgba(255,255,255,0.7)] shrink-0" viewBox="0 0 24 24">
                     <path d="M12 2.6C12.55 2.6 12.88 3.15 13.08 4.7c.62 4.7 1.52 5.6 6.22 6.22 1.55.2 2.1.53 2.1 1.08s-.55.88-2.1 1.08c-4.7.62-5.6 1.52-6.22 6.22-.2 1.55-.53 2.1-1.08 2.1s-.88-.55-1.08-2.1c-.62-4.7-1.52-5.6-6.22-6.22C3.15 12.88 2.6 12.55 2.6 12s.55-.88 2.1-1.08c4.7-.62 5.6-1.52 6.22-6.22C11.12 3.15 11.45 2.6 12 2.6Z"/>
                   </svg>
                   <span>3D animation</span>
                 </span>
 
-                <span className="text-white/30 hidden xs:inline">•</span>
+                <span className="text-white/30 inline">•</span>
 
                 <span className="inline-flex items-center gap-1 sm:gap-1.5 font-semibold tracking-wider uppercase whitespace-nowrap">
-                  <svg className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-white drop-shadow-[0_0_4px_rgba(255,255,255,0.7)] shrink-0" viewBox="0 0 24 24">
+                  <svg className="w-2 h-2 sm:w-3.5 sm:h-3.5 fill-white drop-shadow-[0_0_4px_rgba(255,255,255,0.7)] shrink-0" viewBox="0 0 24 24">
                     <path d="M12 2.6C12.55 2.6 12.88 3.15 13.08 4.7c.62 4.7 1.52 5.6 6.22 6.22 1.55.2 2.1.53 2.1 1.08s-.55.88-2.1 1.08c-4.7.62-5.6 1.52-6.22 6.22-.2 1.55-.53 2.1-1.08 2.1s-.88-.55-1.08-2.1c-.62-4.7-1.52-5.6-6.22-6.22C3.15 12.88 2.6 12.55 2.6 12s.55-.88 2.1-1.08c4.7-.62 5.6-1.52 6.22-6.22C11.12 3.15 11.45 2.6 12 2.6Z"/>
                   </svg>
                   <span>VFX and CGI</span>
                 </span>
 
-                <span className="text-white/30 hidden sm:inline">•</span>
+                <span className="text-white/30 inline">•</span>
 
                 <span className="inline-flex items-center gap-1 sm:gap-1.5 font-semibold tracking-wider uppercase whitespace-nowrap">
-                  <svg className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-white drop-shadow-[0_0_4px_rgba(255,255,255,0.7)] shrink-0" viewBox="0 0 24 24">
+                  <svg className="w-2 h-2 sm:w-3.5 sm:h-3.5 fill-white drop-shadow-[0_0_4px_rgba(255,255,255,0.7)] shrink-0" viewBox="0 0 24 24">
                     <path d="M12 2.6C12.55 2.6 12.88 3.15 13.08 4.7c.62 4.7 1.52 5.6 6.22 6.22 1.55.2 2.1.53 2.1 1.08s-.55.88-2.1 1.08c-4.7.62-5.6 1.52-6.22 6.22-.2 1.55-.53 2.1-1.08 2.1s-.88-.55-1.08-2.1c-.62-4.7-1.52-5.6-6.22-6.22C3.15 12.88 2.6 12.55 2.6 12s.55-.88 2.1-1.08c4.7-.62 5.6-1.52 6.22-6.22C11.12 3.15 11.45 2.6 12 2.6Z"/>
                   </svg>
                   <span>Procedural simulations</span>
@@ -252,8 +252,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </LiquidButton>
           </div>
 
-          {/* Hero Action Buttons with GradientButton Component */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-5 sm:mt-7 w-full sm:w-auto">
+          {/* Hero Action Buttons with GradientButton Component - Single line on mobile */}
+          <div className="flex flex-row items-center justify-center gap-2 sm:gap-4 mt-4 sm:mt-7 w-full max-w-[440px] sm:max-w-none mx-auto px-2">
             <GradientButton
               id="hero-show-projects-btn"
               variant="default"
@@ -262,10 +262,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onExploreProjects();
               }}
               onMouseEnter={() => soundFx.playHover()}
-              className="text-xs sm:text-sm tracking-wider uppercase font-mono-code font-bold py-3 sm:py-3.5 px-6 sm:px-7 min-h-[44px] w-full sm:w-auto"
+              className="text-[10px] xs:text-xs sm:text-sm tracking-wider uppercase font-mono-code font-bold py-2.5 sm:py-3.5 px-2.5 xs:px-4 sm:px-7 min-h-[38px] sm:min-h-[44px] min-w-0 flex-1 sm:flex-initial sm:w-auto whitespace-nowrap"
             >
-              <span>SHOW ALL PROJECTS</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1.5 text-white shrink-0" />
+              <span className="truncate">SHOW ALL PROJECTS</span>
+              <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-1.5 text-white shrink-0" />
             </GradientButton>
 
             <GradientButton
@@ -280,10 +280,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 }
               }}
               onMouseEnter={() => soundFx.playHover()}
-              className="text-xs sm:text-sm tracking-wider uppercase font-mono-code font-bold py-3 sm:py-3.5 px-6 sm:px-7 min-h-[44px] w-full sm:w-auto"
+              className="text-[10px] xs:text-xs sm:text-sm tracking-wider uppercase font-mono-code font-bold py-2.5 sm:py-3.5 px-2.5 xs:px-4 sm:px-7 min-h-[38px] sm:min-h-[44px] min-w-0 flex-1 sm:flex-initial sm:w-auto whitespace-nowrap"
             >
-              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 text-white shrink-0" />
-              <span>CONTACT</span>
+              <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 text-white shrink-0" />
+              <span className="truncate">CONTACT</span>
             </GradientButton>
           </div>
 

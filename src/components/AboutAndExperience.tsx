@@ -217,7 +217,7 @@ export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
           {/* Right Column: Look-Dev Shader Lab + Action Card (4 Cols) */}
           <div className="lg:col-span-4 flex flex-col gap-6 sm:gap-8 justify-start">
             
-            {/* Real-Time Shader Core Card */}
+            {/* Real-Time Shader Core Card - Desktop Only */}
             <BorderGlow
               borderRadius={20}
               glowRadius={30}
@@ -225,7 +225,7 @@ export const AboutAndExperience: React.FC<AboutAndExperienceProps> = ({
               glowIntensity={0.9}
               backgroundColor="#0b0b0e"
               colors={['#818cf8', '#c084fc', '#38bdf8']}
-              className="shadow-2xl overflow-hidden"
+              className="hidden lg:block shadow-2xl overflow-hidden"
             >
               <div className="p-4 sm:p-6 space-y-4">
                 {/* Header */}

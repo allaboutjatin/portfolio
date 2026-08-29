@@ -13,7 +13,6 @@ import { ContactModal } from './components/ContactModal';
 import { FooterHUD } from './components/FooterHUD';
 import { SideRays } from './components/SideRays';
 import { GhostAIAssistant } from './components/GhostAIAssistant';
-import { DynamicIsland } from './components/DynamicIsland';
 import { ProjectItem } from './types';
 import { PROJECTS_DATA } from './data/projectsData';
 import { MediaPlaybackProvider } from './context/MediaPlaybackContext';
@@ -23,7 +22,6 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [raysOpacity, setRaysOpacity] = useState(0);
-  const [showDynamicIsland, setShowDynamicIsland] = useState(false);
   const isProgrammaticScrollRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -64,6 +62,19 @@ export default function App() {
       isProgrammaticScrollRef.current = false;
     }, 950);
   };
+
+  // Force reset scroll to top on initial page load / refresh
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    // Secondary safety check in case layout/canvas causes layout shift
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Track active section on scroll with IntersectionObserver
   useEffect(() => {
@@ -109,13 +120,9 @@ export default function App() {
     };
   }, []);
 
-  // Track when hero section/prism leaves sight to fade in SideRays on the right and trigger Apple Dynamic Island
+  // Track when hero section/prism leaves sight to fade in SideRays on the right
   useEffect(() => {
     const handleScroll = () => {
-      // Dynamic Island appears after the hero window fullscreen expansion takes place
-      const scrolledPastHero = window.scrollY > 220;
-      setShowDynamicIsland(scrolledPastHero);
-
       const heroEl = document.getElementById('hero-section');
       if (!heroEl) return;
 
@@ -148,9 +155,6 @@ export default function App() {
           
           {/* Dynamic Parallax Background VFX Video & 3D Interactive Canvas */}
           <BackgroundVfxCanvas />
-
-          {/* Apple Dynamic Island with GLSL Siri Wave Effect */}
-          <DynamicIsland visible={showDynamicIsland} />
 
           {/* Right-Side Volumetric Light Rays (fades in as Hero Prism scrolls away) */}
           <div

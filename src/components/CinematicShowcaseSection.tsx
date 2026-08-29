@@ -115,61 +115,81 @@ export const CinematicShowcaseSection: React.FC<CinematicShowcaseSectionProps> =
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
                     />
                     
-                    {/* Play / Coming Soon Overlay */}
-                    {selectedProject.isComingSoon ? (
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent flex flex-col justify-end p-4 sm:p-6">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-400 text-black font-mono-code text-[11px] font-bold w-fit mb-1.5 shadow-lg">
-                          <Sparkles className="w-3.5 h-3.5 fill-current" />
-                          <span>COMING SOON • IN PRODUCTION</span>
+                    {/* Play / Title & Info Overlay across all projects */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30 flex flex-col justify-between p-4 sm:p-6 transition-all group-hover:via-black/30">
+                      
+                      {/* Top Badges */}
+                      <div className="flex items-center justify-between w-full pointer-events-none">
+                        <div className="flex items-center space-x-1.5 sm:space-x-2">
+                          <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg bg-black/80 backdrop-blur-md border border-white/20 text-[9px] sm:text-[11px] font-mono-code text-white">
+                            {selectedProject.categoryLabel}
+                          </span>
+                          <span className="px-1.5 sm:px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-[9px] sm:text-[10px] font-mono-code text-emerald-300 font-semibold">
+                            {selectedProject.renderEngine}
+                          </span>
                         </div>
-                        <h4 className="text-xl sm:text-2xl font-display font-extrabold text-white">
+
+                        {selectedProject.duration && (
+                          <span className="px-1.5 sm:px-2 py-0.5 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-[9px] sm:text-[10px] font-mono-code text-slate-300">
+                            {selectedProject.duration}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Center Play Button (for playable video items) */}
+                      {!selectedProject.isComingSoon && (
+                        <div className="self-center my-auto">
+                          <div className="w-11 h-11 sm:w-16 sm:h-16 rounded-full bg-white text-black flex items-center justify-center shadow-2xl transform transition-transform group-hover:scale-110 group-hover:bg-cyan-400">
+                            <Play className="w-5 h-5 sm:w-7 sm:h-7 fill-current translate-x-0.5" />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Bottom Title & Description Overlay */}
+                      <div className="mt-auto">
+                        {selectedProject.isComingSoon ? (
+                          <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-amber-400 text-black font-mono-code text-[9px] sm:text-[11px] font-bold w-fit mb-1 sm:mb-1.5 shadow-lg">
+                            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
+                            <span>COMING SOON • IN PRODUCTION</span>
+                          </div>
+                        ) : (
+                          <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-cyan-400 text-black font-mono-code text-[9px] sm:text-[11px] font-bold w-fit mb-1 sm:mb-1.5 shadow-lg">
+                            <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-current" />
+                            <span>CLICK TO STREAM 4K</span>
+                          </div>
+                        )}
+                        <h4 className="text-base sm:text-2xl lg:text-3xl font-display font-extrabold text-white tracking-tight drop-shadow-md">
                           {selectedProject.title}
                         </h4>
-                        <p className="text-[11px] sm:text-xs text-slate-300 max-w-xl mt-0.5 line-clamp-2">
-                          Formula 1 Real-time track cinematic currently being developed in Unreal Engine. High-octane teaser & breakdown release coming soon.
+                        <p className="text-[10px] sm:text-xs text-slate-200/90 max-w-xl mt-0.5 sm:mt-1 line-clamp-2 drop-shadow leading-relaxed">
+                          {selectedProject.overview}
                         </p>
                       </div>
-                    ) : (
-                      <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center transition-all group-hover:bg-black/30">
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white text-black flex items-center justify-center shadow-2xl transform transition-transform group-hover:scale-110">
-                          <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-black translate-x-0.5" />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Top Badges */}
-                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 pointer-events-none flex items-center space-x-2">
-                      <span className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/20 text-[10px] sm:text-[11px] font-mono-code text-white">
-                        {selectedProject.categoryLabel}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-[10px] font-mono-code text-emerald-300 font-semibold">
-                        {selectedProject.renderEngine}
-                      </span>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Title & Metadata Strip Under Player */}
-              <div className="space-y-2.5">
+              <div className="space-y-2 sm:space-y-2.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-lg sm:text-xl font-display font-extrabold text-white">
+                    <h3 className="text-base sm:text-xl font-display font-extrabold text-white">
                       {selectedProject.title}
                     </h3>
-                    <p className="text-[11px] sm:text-xs text-slate-400 font-mono-code mt-0.5">
+                    <p className="text-[10px] sm:text-xs text-slate-400 font-mono-code mt-0.5">
                       {selectedProject.subtitle || selectedProject.clientOrContext} • {selectedProject.duration || 'Production Master'}
                     </p>
                   </div>
 
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1.5 sm:space-x-2">
                     {onOpenProjectById && (
                       <button
                         type="button"
                         onClick={() => onOpenProjectById(selectedProject.id)}
-                        className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-mono-code flex items-center space-x-1.5 transition-all cursor-pointer"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[11px] sm:text-xs font-mono-code flex items-center space-x-1 sm:space-x-1.5 transition-all cursor-pointer"
                       >
-                        <Layers className="w-3.5 h-3.5 text-sky-400" />
+                        <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-400" />
                         <span>{selectedProject.id === 'project-redline' ? 'Breakdown Specs' : 'Project Details'}</span>
                       </button>
                     )}
@@ -178,25 +198,25 @@ export const CinematicShowcaseSection: React.FC<CinematicShowcaseSectionProps> =
                         href={selectedProject.youtubeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white transition-all flex items-center justify-center"
+                        className="p-1.5 sm:p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-white transition-all flex items-center justify-center"
                         title="Open in YouTube"
                       >
-                        <ExternalLink className="w-3.5 h-3.5" />
+                        <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       </a>
                     )}
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <p className="text-[11px] sm:text-sm text-slate-300 leading-relaxed">
                   {selectedProject.overview}
                 </p>
 
                 {/* Software Stack */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
+                <div className="flex flex-wrap gap-1 sm:gap-1.5 pt-0.5 sm:pt-1">
                   {selectedProject.softwareStack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/10 text-[11px] font-mono-code text-slate-300"
+                      className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[9.5px] sm:text-[11px] font-mono-code text-slate-300"
                     >
                       {tech}
                     </span>

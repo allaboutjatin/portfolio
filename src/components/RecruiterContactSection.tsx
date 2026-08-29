@@ -170,19 +170,19 @@ export const RecruiterContactSection: React.FC = () => {
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 flex-1">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4 flex-1">
               {artistPortals.map((portal) => {
                 const Icon = portal.icon;
                 return (
                   <BorderGlow
                     key={portal.name}
-                    borderRadius={18}
-                    glowRadius={28}
-                    edgeSensitivity={26}
+                    borderRadius={16}
+                    glowRadius={24}
+                    edgeSensitivity={24}
                     glowIntensity={0.85}
                     backgroundColor="#0b0b0e"
                     colors={portal.glowColors}
-                    className="shadow-lg group"
+                    className="shadow-lg group h-full"
                   >
                     <a
                       href={portal.url}
@@ -190,23 +190,23 @@ export const RecruiterContactSection: React.FC = () => {
                       rel="noopener noreferrer"
                       onClick={() => soundFx.playClick()}
                       onMouseEnter={() => soundFx.playHover()}
-                      className="p-4 sm:p-5 flex flex-col justify-between h-full group active:scale-[0.98] transition-transform"
+                      className="p-3 sm:p-5 flex flex-col justify-between h-full group active:scale-[0.98] transition-transform"
                     >
                       <div className="flex items-start justify-between">
-                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-white/10 flex items-center justify-center group-hover:scale-105 transition-transform ${portal.iconBg}`}>
-                          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <div className={`w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl border border-white/10 flex items-center justify-center group-hover:scale-105 transition-transform ${portal.iconBg}`}>
+                          <Icon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                         </div>
-                        <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500 group-hover:text-white transition-colors" />
+                        <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-slate-500 group-hover:text-white transition-colors" />
                       </div>
 
-                      <div className="mt-3 sm:mt-4">
-                        <h4 className="text-sm sm:text-base font-display font-bold text-white group-hover:text-sky-300 transition-colors">
+                      <div className="mt-2 sm:mt-4">
+                        <h4 className="text-xs sm:text-base font-display font-bold text-white group-hover:text-sky-300 transition-colors truncate">
                           {portal.name}
                         </h4>
-                        <p className={`text-[11px] sm:text-xs font-mono-code font-semibold mt-0.5 ${portal.accent}`}>
+                        <p className={`text-[9.5px] sm:text-xs font-mono-code font-semibold mt-0.5 truncate ${portal.accent}`}>
                           {portal.handle}
                         </p>
-                        <p className="text-[10px] sm:text-[11px] text-slate-400 mt-1 sm:mt-2 font-normal">
+                        <p className="text-[8.5px] sm:text-[11px] text-slate-400 mt-0.5 sm:mt-2 font-normal line-clamp-2 leading-tight">
                           {portal.desc}
                         </p>
                       </div>

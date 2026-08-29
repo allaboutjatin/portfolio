@@ -16,7 +16,10 @@ import {
   Volume2,
   RefreshCw,
   Mail,
-  Film
+  Film,
+  Phone,
+  GraduationCap,
+  Briefcase
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -37,6 +40,21 @@ interface GhostAIAssistantProps {
 
 const QUESTION_PRESETS = [
   {
+    id: 'who-is-jatin',
+    label: '👤 Who is Jatin?',
+    question: 'Who is Jatin Kumar and what is his background?',
+  },
+  {
+    id: 'education-bca',
+    label: '🎓 Education & BCA Journey',
+    question: 'Tell me about Jatin’s education, BCA background, and how he transitioned into 3D.',
+  },
+  {
+    id: 'contact-whatsapp',
+    label: '📬 Contact & WhatsApp',
+    question: 'How can I contact Jatin or reach him on WhatsApp/Email?',
+  },
+  {
     id: 'skills',
     label: '⚡ Core 3D & VFX Toolchain',
     question: 'What are Jatin’s primary 3D software and technical skills?',
@@ -48,18 +66,8 @@ const QUESTION_PRESETS = [
   },
   {
     id: 'availability',
-    label: '💼 Availability & Role Suitability',
+    label: '💼 Hiring & Availability',
     question: 'Is Jatin open for full-time or freelance 3D/VFX roles?',
-  },
-  {
-    id: 'background',
-    label: '🌟 Background & Studio Experience',
-    question: 'What is Jatin’s background before specializing in 3D & real-time graphics?',
-  },
-  {
-    id: 'contact',
-    label: '📬 How to Hire or Reach Out',
-    question: 'How can I get in touch or schedule an interview with Jatin?',
   },
 ];
 
@@ -79,8 +87,8 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
 
   const POPUP_MESSAGES = [
     'Hi! I’m Duddu 👻 Ask me anything about Jatin’s 3D work!',
-    'Ask me anything, i\'ll repomnd if i know that... ✨',
-    'i am watching you mouse where are you clicking 👀',
+    'Ask me anything, I’ll respond if I know that... ✨',
+    'I am watching your mouse, where are you clicking? 👀',
   ];
 
   const SECTION_MESSAGES: Record<string, string> = {
@@ -102,7 +110,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
     const initialGreeting: ChatMessage = {
       id: 'msg-welcome',
       sender: 'ghost',
-      text: `Hi there! 👋 I’m Duddu, Jatin’s AI Assistant.\n\nI know everything about his Unreal Engine cinematics, Houdini VFX pipeline, Years of studio experience, and software skill set.\n\nAsk me anything, i'll repomnd if i know that...`,
+      text: `Hi there! 👋 I’m Duddu, Jatin’s AI Assistant.\n\nI know everything about his Unreal Engine cinematics, Houdini VFX pipeline, studio production experience, education journey, and software skills.\n\nAsk me anything, I’ll respond if I know that...`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       quickActions: [
         {
@@ -112,7 +120,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
           },
         },
         {
-          label: 'Send Email 💌',
+          label: 'Contact Jatin 💌',
           action: () => onOpenContactModal(),
         },
       ],
@@ -247,84 +255,276 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
   };
 
   const generateAnswer = (query: string): { text: string; quickActions?: { label: string; action: () => void }[] } => {
-    const q = query.toLowerCase();
+    const q = query.toLowerCase().trim();
 
-    if (q.includes('skill') || q.includes('software') || q.includes('tool') || q.includes('houdini') || q.includes('unreal') || q.includes('maya')) {
+    // 1. Identity of Duddu
+    if (
+      q.includes('who are you') ||
+      q.includes('what is duddu') ||
+      q.includes('who is duddu') ||
+      q.includes('your name') ||
+      q.includes('tell me about yourself')
+    ) {
       return {
-        text: `Jatin’s Core Technical Stack & Proficiency:\n\n• Unreal Engine 5.5 / 5.6 (96%): Lumen ray tracing, Nanite virtualized geometry, Sequencer cinematic choreography, Movie Render Queue (MRQ) 32-bit linear EXR pipelines.\n• Autodesk Maya (95%): High-precision quad Sub-D hard-surface modeling, complex UV/UDIM layout, CAD geometry optimization.\n• SideFX Houdini 20 (92%): FLIP fluid dynamics, VEX procedural scripting, sparse pyro combustion, and Solaris USD pipelines.\n• Substance 3D Painter & Designer (94%): Multi-layer automotive clearcoat shaders, procedural weathering masks, custom PBR graphs.\n• DaVinci Resolve Studio (92%) & Foundry Nuke (89%): ACEScg color science, 35mm optical film stock emulation, Cryptomatte multi-pass compositing.`,
+        text: `Hey there! 👻 I'm Duddu, Jatin Kumar’s personal AI companion and 3D portfolio guide!\n\nI live here on Jatin's website and I'm trained with full knowledge about his:\n• Unreal Engine 5.5/5.6 real-time cinematics & lighting\n• Houdini procedural VFX & Maya 3D hard-surface modeling\n• Education, BCA journey, and transition into 3D\n• 4+ Years of broadcast media production experience\n• Direct contact, WhatsApp, and collaboration channels\n\nFeel free to ask me anything!`,
         quickActions: [
           {
-            label: 'Explore Skills Pipeline',
-            action: () => onNavigateToSection && onNavigateToSection('skills-section'),
+            label: 'Who is Jatin? 👤',
+            action: () => handleSendMessage('Who is Jatin Kumar?'),
+          },
+          {
+            label: 'View Showreel 🎬',
+            action: () => onNavigateToSection && onNavigateToSection('showreel-section'),
           },
         ],
       };
     }
 
-    if (q.includes('project') || q.includes('redline') || q.includes('mexicana') || q.includes('work') || q.includes('castle') || q.includes('beach') || q.includes('f1') || q.includes('bpcl')) {
+    // 2. Identity of Jatin Kumar
+    if (
+      q.includes('who is jatin') ||
+      q.includes('about jatin') ||
+      q.includes('tell me about jatin') ||
+      q.includes('who are jatin') ||
+      q.includes('who is he')
+    ) {
       return {
-        text: `Featured 3D & Cinematic Projects:\n\n1. PROJECT REDLINE: UE 5.6 automotive hypercar cinematic with multi-layer clearcoat shaders and full behind-the-scenes breakdown.\n2. MEXICANA: Atmospheric mid-century desert fuel station featuring volumetric dust particles and retro 35mm film grading.\n3. F1 UNREAL CINEMATIC (In Production): Class-A aerodynamic CAD conversion, thermal brake glow, and high-speed virtual camera tracking.\n4. BHARAT PETROLEUM (BPCL): Commercial product film with Houdini FLIP fluid fuel mechanics and broadcast studio lookdev.\n5. THE LOST CASTLE: Massive Nanite ancient citadel with dynamic SpeedTree wind and volumetric sun god-rays.`,
+        text: `Jatin Kumar is a 3D Artist, Real-Time Technical Director, and Creative Technologist based in Noida (Delhi NCR), India 🇮🇳.\n\nKey Highlights:\n• Core Specialization: Unreal Engine 5 real-time cinematics, SideFX Houdini procedural VFX, and Autodesk Maya Sub-D hard-surface modeling.\n• Studio Background: Over 4+ years of high-pressure media production spanning broadcast journalism, high-profile dignitaries coverage, and video editing for a studio with 1.5M+ subscribers.\n• Philosophy: Combining artistic cinematic lookdev with deep technical problem-solving.\n\nHe is currently open to full-time studio roles, remote contracts, and freelance projects!`,
         quickActions: [
           {
-            label: 'View Projects Grid',
-            action: () => onNavigateToSection && onNavigateToSection('projects-section'),
+            label: 'Read Full Bio 📖',
+            action: () => onNavigateToSection && onNavigateToSection('about-section'),
           },
-        ],
-      };
-    }
-
-    if (q.includes('availab') || q.includes('hire') || q.includes('job') || q.includes('freelance') || q.includes('full-time') || q.includes('role') || q.includes('location')) {
-      return {
-        text: `Status: Open to Full-Time & Freelance Opportunities! 💼\n\n• Target Roles: 3D Artist, Real-Time Technical Director, Environment Artist, Automotive CGI Specialist, or Cinematic VFX Artist.\n• Location: Based in Noida, India (Open to Remote, Hybrid, & Relocation opportunities).\n• Why Hire Jatin: Combines deep artistic lookdev instincts with robust technical troubleshooting, tight deadline endurance, and a versatile cross-disciplinary media background.`,
-        quickActions: [
           {
-            label: 'Contact Jatin Now 💌',
+            label: 'Contact Jatin 💌',
             action: () => onOpenContactModal(),
           },
         ],
       };
     }
 
-    if (q.includes('background') || q.includes('experience') || q.includes('story') || q.includes('who is') || q.includes('bio') || q.includes('about')) {
+    // 3. College, BCA, Graduation, Dropout Story & Education
+    if (
+      q.includes('college') ||
+      q.includes('graduation') ||
+      q.includes('graduate') ||
+      q.includes('bca') ||
+      q.includes('drop') ||
+      q.includes('dropout') ||
+      q.includes('degree') ||
+      q.includes('education') ||
+      q.includes('study') ||
+      q.includes('school') ||
+      q.includes('university')
+    ) {
       return {
-        text: `Jatin’s Background & Journey:\n\n• Before transitioning deeply into 3D & real-time engines, Jatin accumulated 4+ years of high-pressure media production experience spanning live broadcast, videography, podcasting, and editing.\n• Collaborated with major Indian news networks (News Nation, Zee News, Doordarshan) covering high-profile events for national dignitaries (former President of India, State Governors, Bollywood personalities).\n• Production Lead in a media studio with over 1.5 Million+ digital followers/subscribers, learning rapid problem-solving when "there isn't a manual".\n• Highly adaptable: also skilled in PC hardware troubleshooting, video editing, and technical problem solving.`,
+        text: `Here is Jatin's Education & Learning Journey 🎓:\n\n• BCA Foundation & Bold Transition: Jatin initially enrolled in BCA (Bachelor of Computer Applications) to study computer science and software principles. However, discovering his deep passion for 3D CGI and visual storytelling, he made the deliberate decision to drop out of BCA and dedicate 100% of his focus to professional 3D Animation, VFX, and real-time graphics.\n\n• Specialized 3D & VFX Training: He completed intensive specialization in 3D Animation, VFX, and CGI, mastering Unreal Engine, Maya, Houdini, Substance 3D, and Nuke.\n\n• Unique Edge: His computer science background gives him a huge technical advantage in writing Houdini VEX expressions, Unreal Engine Blueprints, and troubleshooting complex real-time shader pipelines!`,
         quickActions: [
           {
-            label: 'Read Full Bio',
-            action: () => onNavigateToSection && onNavigateToSection('about-section'),
+            label: 'View Experience Highlights 🚀',
+            action: () => onNavigateToSection && onNavigateToSection('experience-section'),
+          },
+          {
+            label: 'Explore Skills Pipeline ⚡',
+            action: () => onNavigateToSection && onNavigateToSection('pipeline-section'),
           },
         ],
       };
     }
 
-    if (q.includes('contact') || q.includes('email') || q.includes('reach') || q.includes('artstation') || q.includes('message')) {
+    // 4. Contact, WhatsApp, Phone Number, Email, How to Talk/Reach
+    if (
+      q.includes('contact') ||
+      q.includes('whatsapp') ||
+      q.includes('phone') ||
+      q.includes('number') ||
+      q.includes('email') ||
+      q.includes('reach') ||
+      q.includes('talk') ||
+      q.includes('hire') ||
+      q.includes('message') ||
+      q.includes('call') ||
+      q.includes('connect')
+    ) {
       return {
-        text: `Direct Contact Information:\n\n• Email: k.jatinofficial@gmail.com\n• ArtStation: artstation.com/allaboutjatin\n• Location: Noida, India\n• Response Time: Usually within 24 hours!\n\nClick the button below to open the instant contact dispatch modal:`,
+        text: `Here is how you can connect with Jatin directly 📬:\n\n• Email: k.jatinofficial@gmail.com\n• ArtStation: artstation.com/allaboutjatin\n• Location: Noida (Delhi NCR), India\n• Phone / WhatsApp: To protect from web scrapers, Jatin shares his direct WhatsApp number and phone contact immediately upon receiving an email or dispatch request! Click below to send a note or request a call.\n• Response Time: Prompt, usually within 24 hours!`,
         quickActions: [
           {
             label: 'Open Contact Form 🚀',
             action: () => onOpenContactModal(),
           },
+          {
+            label: 'Send Email Directly ✉️',
+            action: () => {
+              window.location.href = 'mailto:k.jatinofficial@gmail.com?subject=Project%20Inquiry%20from%20Portfolio';
+            },
+          },
         ],
       };
     }
 
-    if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('who are you') || q.includes('duddu')) {
+    // 5. Software, Skills, Tools, Pipeline
+    if (
+      q.includes('skill') ||
+      q.includes('software') ||
+      q.includes('tool') ||
+      q.includes('houdini') ||
+      q.includes('unreal') ||
+      q.includes('maya') ||
+      q.includes('substance') ||
+      q.includes('nuke') ||
+      q.includes('davinci') ||
+      q.includes('speedtree') ||
+      q.includes('zbrush') ||
+      q.includes('tech stack')
+    ) {
       return {
-        text: `Hey there! 👻 I'm Duddu, Jatin's 3D AI companion. Ask me anything about his Unreal Engine cinematics, Houdini VFX pipeline, studio experience, and software skills.`,
+        text: `Jatin’s Core Technical Stack & Proficiency 💻⚡:\n\n• Unreal Engine 5.5 / 5.6 (96%): Lumen ray-traced global illumination, Nanite geometry, Sequencer cinematic director, Movie Render Queue (MRQ) 32-bit linear EXR pipelines.\n• Autodesk Maya (95%): High-precision quad Sub-D hard-surface modeling, complex UDIM UV layout, CAD optimization.\n• SideFX Houdini 20 (92%): FLIP fluid simulations, procedural VEX nodes, sparse pyro combustion, Solaris USD pipelines.\n• Substance 3D Painter & Designer (94%): Multi-layer automotive clearcoat shaders, procedural weathering masks, custom PBR graphs.\n• DaVinci Resolve Studio (92%) & Foundry Nuke (89%): ACEScg color management, 35mm optical film stock emulation, Cryptomatte multi-pass compositing.\n• SpeedTree & ZBrush: Dynamic wind physics foliage and high-poly surface sculpting.`,
+        quickActions: [
+          {
+            label: 'Explore Skills Pipeline ⚡',
+            action: () => onNavigateToSection && onNavigateToSection('pipeline-section'),
+          },
+        ],
       };
     }
 
-    // Default intelligent response
+    // 6. Projects & Showcase
+    if (
+      q.includes('project') ||
+      q.includes('redline') ||
+      q.includes('mexicana') ||
+      q.includes('f1') ||
+      q.includes('bpcl') ||
+      q.includes('castle') ||
+      q.includes('work') ||
+      q.includes('cinematic') ||
+      q.includes('car') ||
+      q.includes('environment')
+    ) {
+      return {
+        text: `Featured 3D & Cinematic Projects 🎬:\n\n1. PROJECT REDLINE: Hypercar cinematic in Unreal Engine 5.6 featuring multi-layer clearcoat shaders, high-speed camera tracking, and full LookDev breakdown.\n2. MEXICANA: Atmospheric mid-century desert fuel station with dynamic sun god-rays, volumetric dust, and retro 35mm film grading.\n3. F1 UNREAL CINEMATIC: Class-A CAD conversion, aerodynamic CFD visualizer, and glowing carbon ceramic brake lookdev.\n4. BHARAT PETROLEUM (BPCL): Commercial product film with Houdini FLIP fluid fuel mechanics and broadcast studio lookdev.\n5. THE LOST CASTLE: Massive Nanite ancient citadel with dynamic SpeedTree wind and volumetric atmosphere.`,
+        quickActions: [
+          {
+            label: 'View Projects Grid 🎨',
+            action: () => onNavigateToSection && onNavigateToSection('projects-section'),
+          },
+          {
+            label: 'Watch 4K Showreel 🍿',
+            action: () => onNavigateToSection && onNavigateToSection('showreel-section'),
+          },
+        ],
+      };
+    }
+
+    // 7. Studio Experience, News Channels, Dignitaries
+    if (
+      q.includes('experience') ||
+      q.includes('news') ||
+      q.includes('zee') ||
+      q.includes('doordarshan') ||
+      q.includes('president') ||
+      q.includes('broadcast') ||
+      q.includes('studio') ||
+      q.includes('history') ||
+      q.includes('past')
+    ) {
+      return {
+        text: `Jatin’s Studio & Broadcast Experience 🚀:\n\n• 4+ Years High-Pressure Media Production: Spanning live broadcast, photography, videography, post-production editing, podcasting, and multi-cam streaming.\n• National Dignitaries Coverage: Contributed to the media coverage of events attended by the former President of India, State Governors, Chief Ministers, and Bollywood personalities.\n• High-Scale Studio Leadership: Production Lead in a media production studio with 1.5M+ combined digital followers and subscribers.\n• Broadcast Networks Collaboration: Worked alongside teams from News Nation, Zee News, and Doordarshan.`,
+        quickActions: [
+          {
+            label: 'View Experience Timeline 📜',
+            action: () => onNavigateToSection && onNavigateToSection('experience-section'),
+          },
+          {
+            label: 'Contact Jatin 💌',
+            action: () => onOpenContactModal(),
+          },
+        ],
+      };
+    }
+
+    // 8. Availability, Roles, Location, Salary, Freelance
+    if (
+      q.includes('availab') ||
+      q.includes('job') ||
+      q.includes('role') ||
+      q.includes('freelance') ||
+      q.includes('full-time') ||
+      q.includes('full time') ||
+      q.includes('remote') ||
+      q.includes('relocat') ||
+      q.includes('open to work') ||
+      q.includes('location') ||
+      q.includes('where is jatin') ||
+      q.includes('noida') ||
+      q.includes('delhi') ||
+      q.includes('india')
+    ) {
+      return {
+        text: `Status: Open for Full-Time & Freelance Opportunities! 💼\n\n• Target Roles: 3D Artist, Real-Time Technical Director, Unreal Engine Generalist, Environment Artist, Automotive CGI Specialist, or Cinematic VFX Artist.\n• Current Location: Noida, Uttar Pradesh, India (Delhi NCR).\n• Relocation & Remote: 100% open to Remote worldwide, Hybrid, or On-site Relocation.\n• Availability: Immediate / Short notice.\n\nLet’s build something extraordinary together!`,
+        quickActions: [
+          {
+            label: 'Hire Jatin 🚀',
+            action: () => onOpenContactModal(),
+          },
+        ],
+      };
+    }
+
+    // 9. Hardware & PC troubleshooting
+    if (
+      q.includes('pc') ||
+      q.includes('hardware') ||
+      q.includes('spec') ||
+      q.includes('troubleshoot') ||
+      q.includes('gpu') ||
+      q.includes('rig')
+    ) {
+      return {
+        text: `Technical & Hardware Proficiency 🖥️:\n\n• In addition to creative 3D artistry, Jatin has extensive hands-on experience with PC hardware assembly, BIOS tuning, thermal management, GPU driver optimization for real-time rendering, and diagnosing complex Windows / software crashes.\n• He ensures high-efficiency frame pacing and asset optimization for smooth 60fps+ real-time playback in Unreal Engine!`,
+      };
+    }
+
+    // 10. Greetings & Friendly banter
+    if (
+      q === 'hi' ||
+      q === 'hello' ||
+      q === 'hey' ||
+      q === 'namaste' ||
+      q === 'hola' ||
+      q.startsWith('hi ') ||
+      q.startsWith('hello ')
+    ) {
+      return {
+        text: `Hey there! 👻 What would you like to know about Jatin? I can tell you about his 3D projects, software skills, education journey, or how to get in touch with him!`,
+        quickActions: [
+          {
+            label: 'Projects 🎬',
+            action: () => onNavigateToSection && onNavigateToSection('projects-section'),
+          },
+          {
+            label: 'Contact Jatin 📬',
+            action: () => onOpenContactModal(),
+          },
+        ],
+      };
+    }
+
+    // 11. Graceful Intelligent Fallback
     return {
-      text: `Jatin specializes in Unreal Engine real-time cinematics, Maya hard-surface Sub-D modeling, and Houdini procedural VFX.\n\nHe has worked across high-impact automotive lookdev (Project REDLINE), commercial product films (BPCL), and large-scale Nanite environments (The Lost Castle).\n\nWould you like to connect directly or inspect his showreel?`,
+      text: `I don't know much about this context, but surely Jatin will! Feel free to reach out to him directly at k.jatinofficial@gmail.com or send a quick message through the contact modal. 💌\n\nIn the meantime, feel free to explore his projects, software toolchain, or 4K showreel!`,
       quickActions: [
         {
-          label: 'Contact Jatin 💌',
+          label: 'Contact Jatin Directly 💌',
           action: () => onOpenContactModal(),
         },
         {
-          label: 'Explore Projects 🎬',
+          label: 'View Showreel 🎬',
+          action: () => onNavigateToSection && onNavigateToSection('showreel-section'),
+        },
+        {
+          label: 'Explore Projects 🚀',
           action: () => onNavigateToSection && onNavigateToSection('projects-section'),
         },
       ],
@@ -442,7 +642,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
                           {
                             id: `msg-reset-${Date.now()}`,
                             sender: 'ghost',
-                            text: `Chat refreshed! 👻 Ask me anything, i'll repomnd if i know that...`,
+                            text: `Chat refreshed! 👻 Ask me anything, I’ll respond if I know that...`,
                             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                           },
                         ]);
@@ -490,7 +690,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
                                   soundFx.playClick();
                                   qa.action();
                                 }}
-                                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 border border-cyan-400/30 text-[10px] font-mono-code font-semibold transition-colors"
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 border border-cyan-400/30 text-[10px] font-mono-code font-semibold transition-colors cursor-pointer"
                               >
                                 <span>{qa.label}</span>
                                 <ArrowRight className="w-2.5 h-2.5" />
@@ -522,7 +722,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
                     <button
                       key={preset.id}
                       onClick={() => handleSendMessage(preset.question)}
-                      className="shrink-0 px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-[10px] font-mono-code transition-all hover:border-cyan-400/40 flex items-center gap-1"
+                      className="shrink-0 px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-[10px] font-mono-code transition-all hover:border-cyan-400/40 flex items-center gap-1 cursor-pointer"
                     >
                       <Sparkles className="w-2.5 h-2.5 text-amber-400" />
                       <span>{preset.label}</span>
@@ -542,7 +742,7 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    placeholder="Ask about Jatin's 3D work, software, projects..."
+                    placeholder="Ask about Jatin's 3D work, BCA background, WhatsApp, skills..."
                     className="flex-1 bg-white/5 border border-white/15 focus:border-cyan-400 rounded-full px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none transition-colors"
                   />
                   <button
@@ -597,3 +797,4 @@ export const GhostAIAssistant: React.FC<GhostAIAssistantProps> = ({
     </AnimatePresence>
   );
 };
+

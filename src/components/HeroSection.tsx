@@ -67,6 +67,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         }
         useWindowScroll={true}
+        smoothing={isMobile ? 0 : 0.08}
         startWidth={startWidth}
         startHeight={startHeight}
         startRadius={startRadius}
@@ -100,19 +101,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     fontFamily: "'Instrument Serif', serif"
                   }
                 ]}
-                particleSize={isMobile ? 2.0 : 2.1}
-                density={isMobile ? 3.3 : 3.2}
+                particleSize={isMobile ? 1.9 : 2.1}
+                density={isMobile ? 4.5 : 3.2}
                 color="#ffffff"
                 highlightColor="#ffffff"
-                scatter={isMobile ? 35 : 40}
-                gatherDuration={1.3}
+                scatter={isMobile ? 24 : 40}
+                gatherDuration={isMobile ? 1.1 : 1.3}
                 enableGather={true}
                 trigger="mount"
-                pointerRepel={isMobile ? 40 : 50}
-                repelRadius={isMobile ? 100 : 120}
-                idleDrift={0.5}
+                pointerRepel={isMobile ? 30 : 50}
+                repelRadius={isMobile ? 80 : 120}
+                idleDrift={isMobile ? 0.3 : 0.5}
                 fontSize={isMobile ? "clamp(2.6rem, 10.5vw, 3.8rem)" : "clamp(2.4rem, 4.8vw, 4.2rem)"}
-                glow={true}
+                glow={!isMobile}
                 className="w-full h-full"
               />
             </div>

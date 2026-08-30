@@ -130,6 +130,10 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     let height = 0;
     let dpr = 1;
     let startTime: number | null = null;
+    let isVisible = true;
+    let isIdle = false;
+    let lastActiveTime = performance.now();
+    const isMobileDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || 'ontouchstart' in window);
 
     const pointer = {
       active: false,
@@ -147,7 +151,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       ctx.fillStyle = particle.color;
       ctx.globalAlpha = effectiveAlpha;
 
-      if (size <= 2.1) {
+      if (isMobileDevice || size <= 2.2) {
         ctx.fillRect(particle.x - size / 2, particle.y - size / 2, size, size);
         ctx.globalAlpha = 1;
         return;
@@ -160,6 +164,11 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     };
 
     const render = (now: number) => {
+      if (!isVisible) {
+        animationFrame = null;
+        return;
+      }
+
       if (startTime === null) startTime = now;
       const elapsed = (now - startTime) / 1000;
       const introProgress = gatherDuration > 0 ? Math.min(1, elapsed / gatherDuration) : 1;
@@ -168,8 +177,9 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
 
       ctx.clearRect(0, 0, width, height);
 
-      if (glow && !reducedMotion) {
-        ctx.shadowBlur = particleSize * 2.8 * easeIntro;
+      // Only apply shadowBlur on desktop and during intro to prevent mobile GPU stall
+      if (glow && !reducedMotion && !isMobileDevice && introProgress < 1) {
+        ctx.shadowBlur = Math.min(8, particleSize * 2.0 * easeIntro);
         ctx.shadowColor = highlightColor;
       } else {
         ctx.shadowBlur = 0;
@@ -191,24 +201,27 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
         let baseY = currentTargetY;
 
         if (!reducedMotion && idleDrift > 0 && introProgress > 0.6) {
-          const driftTime = now * 0.0012;
+          const driftTime = now * 0.001;
           const driftMul = Math.min(1, (introProgress - 0.6) / 0.4);
           baseX += Math.sin(driftTime * 0.8 + particle.seed * 8) * idleDrift * particle.depth * driftMul;
           baseY += Math.cos(driftTime * 0.65 + particle.depth * 8) * idleDrift * particle.depth * driftMul;
         }
 
         if (pointer.active && !reducedMotion && pointerRepel > 0 && repelRadius > 0 && introProgress > 0.8) {
+          lastActiveTime = now;
           const dx = baseX - pointer.smoothX;
           const dy = baseY - pointer.smoothY;
-          const distance = Math.hypot(dx, dy);
-          if (distance > 0 && distance < repelRadius) {
+          const distSq = dx * dx + dy * dy;
+          const rSq = repelRadius * repelRadius;
+          if (distSq > 0 && distSq < rSq) {
+            const distance = Math.sqrt(distSq);
             const force = Math.pow(1 - distance / repelRadius, 2) * pointerRepel;
             baseX += (dx / distance) * force;
             baseY += (dy / distance) * force;
           }
         }
 
-        const follow = reducedMotion ? 1 : 0.24;
+        const follow = reducedMotion ? 1 : 0.28;
         particle.x += (baseX - particle.x) * follow;
         particle.y += (baseY - particle.y) * follow;
 
@@ -216,11 +229,21 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       });
 
       ctx.shadowBlur = 0;
+
+      // On mobile, if gather is complete and there is no active touch interaction for 3s, pause loop to save 100% CPU/battery
+      if (isMobileDevice && introProgress >= 1 && !pointer.active && (now - lastActiveTime > 2500)) {
+        isIdle = true;
+        animationFrame = null;
+        return;
+      }
+
       animationFrame = window.requestAnimationFrame(render);
     };
 
     const ensureRenderLoop = () => {
-      if (animationFrame === null) {
+      isIdle = false;
+      lastActiveTime = performance.now();
+      if (animationFrame === null && isVisible) {
         animationFrame = window.requestAnimationFrame(render);
       }
     };
@@ -233,7 +256,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
 
       if (width <= 0 || height <= 0) return;
 
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = isMobileDevice ? 1 : Math.min(window.devicePixelRatio || 1, 1.25);
       canvas.width = Math.max(1, Math.floor(width * dpr));
       canvas.height = Math.max(1, Math.floor(height * dpr));
       canvas.style.width = '100%';
@@ -321,7 +344,8 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
 
       const imageData = offCtx.getImageData(0, 0, offscreen.width, offscreen.height);
       const rawPoints: { x: number; y: number; alpha: number }[] = [];
-      const step = Math.max(2, Math.floor(density));
+      const baseStep = Math.max(2, Math.floor(density));
+      const step = isMobileDevice ? Math.max(4, baseStep + 1) : baseStep;
 
       let minX = offscreen.width;
       let maxX = 0;
@@ -356,7 +380,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
         alpha: pt.alpha
       }));
 
-      const maxParticles = Math.max(900, Math.min(5000, Math.floor((width * height) / 80)));
+      const maxParticles = isMobileDevice ? 320 : Math.max(900, Math.min(4000, Math.floor((width * height) / 80)));
       const stride = Math.max(1, Math.ceil(targets.length / maxParticles));
       const selected = targets.filter((_, index) => index % stride === 0);
 
@@ -403,6 +427,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       pointer.x = event.clientX - rect.left;
       pointer.y = event.clientY - rect.top;
       pointer.active = true;
+      ensureRenderLoop();
     };
 
     const handlePointerLeave = () => {
@@ -412,6 +437,31 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     const handlePointerEnter = (event: PointerEvent) => {
       handlePointerMove(event);
     };
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        isVisible = false;
+        if (animationFrame !== null) {
+          window.cancelAnimationFrame(animationFrame);
+          animationFrame = null;
+        }
+      } else {
+        isVisible = true;
+        ensureRenderLoop();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) {
+        ensureRenderLoop();
+      } else if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+    });
+    intersectionObserver.observe(container);
 
     const reduceMotionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
     const handleReduceMotionChange = (event: MediaQueryListEvent) => {
@@ -431,6 +481,8 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
     return () => {
       buildId += 1;
       resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibility);
       reduceMotionQuery?.removeEventListener('change', handleReduceMotionChange);
       canvas.removeEventListener('pointerenter', handlePointerEnter);
       canvas.removeEventListener('pointermove', handlePointerMove);

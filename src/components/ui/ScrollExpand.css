@@ -27,6 +27,10 @@
   width: 100%;
   overflow: hidden;
   --se-title-size: 4rem;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .scroll-expand__frame {
@@ -34,6 +38,10 @@
   inset: 0;
   clip-path: inset(21% 29% 21% 29% round 24px);
   will-change: clip-path;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .scroll-expand__media {
@@ -46,6 +54,10 @@
   transform-origin: center;
   user-select: none;
   -webkit-user-drag: none;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .scroll-expand__scrim {

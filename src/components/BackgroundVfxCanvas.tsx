@@ -19,6 +19,7 @@ export const BackgroundVfxCanvas: React.FC<BackgroundVfxCanvasProps> = ({
     let animationFrameId: number;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
+    const isMobile = window.innerWidth < 768;
 
     const handleResize = () => {
       if (!canvas) return;
@@ -27,7 +28,7 @@ export const BackgroundVfxCanvas: React.FC<BackgroundVfxCanvasProps> = ({
     };
     window.addEventListener('resize', handleResize);
 
-    const particleCount = 45;
+    const particleCount = isMobile ? 12 : 20;
     const particles: Array<{
       x: number;
       y: number;
@@ -41,14 +42,19 @@ export const BackgroundVfxCanvas: React.FC<BackgroundVfxCanvasProps> = ({
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 1.5 + 0.5,
-        alpha: Math.random() * 0.4 + 0.1
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        size: Math.random() * 1.2 + 0.6,
+        alpha: Math.random() * 0.35 + 0.1
       });
     }
 
     const render = () => {
+      if (document.hidden) {
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
       for (let i = 0; i < particles.length; i++) {
@@ -63,22 +69,26 @@ export const BackgroundVfxCanvas: React.FC<BackgroundVfxCanvasProps> = ({
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha * 0.4})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha * 0.35})`;
         ctx.fill();
 
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+        // Connect lines on desktop only, using squared distance for high performance
+        if (!isMobile) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const distSq = dx * dx + dy * dy;
 
-          if (dist < 90) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - dist / 90) * 0.08})`;
-            ctx.lineWidth = 0.6;
-            ctx.stroke();
+            if (distSq < 6400) { // 80 * 80
+              const dist = Math.sqrt(distSq);
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - dist / 80) * 0.05})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       }

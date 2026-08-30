@@ -96,7 +96,9 @@ export function MeshGradientSVG({
         {/* Ghost Body Shader Canvas clipped to wavy skirt shape */}
         <foreignObject width="231" height="260" clipPath="url(#dudduShapeClip)">
           <div className="w-full h-full bg-gradient-to-br from-[#FFB3D9] via-[#4A90E2] to-[#1A1A2E]">
-            <MeshGradient colors={colors} className="w-full h-full" speed={1} />
+            {typeof window !== 'undefined' && window.innerWidth >= 768 && (
+              <MeshGradient colors={colors} className="w-full h-full opacity-90" speed={0.6} />
+            )}
           </div>
         </foreignObject>
 

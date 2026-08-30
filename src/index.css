@@ -474,5 +474,12 @@
     --border-color-1: hsla(320, 75%, 90%, 0.2);
     --border-color-2: hsla(320, 50%, 90%, 0.75);
   }
+
+  /* GPU-Accelerated Scrolling & Section Visibility Optimizations */
+  .section-contain-performance {
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px;
+    transform: translateZ(0);
+  }
 }
 

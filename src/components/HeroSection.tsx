@@ -62,6 +62,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               colorFrequency={1}
               noise={0}
               glow={1}
+              suspendWhenOffscreen={true}
             />
           </div>
         }

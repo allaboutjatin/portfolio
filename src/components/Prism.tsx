@@ -34,7 +34,7 @@ const Prism: React.FC<PrismProps> = ({
   hoverStrength = 2,
   inertia = 0.05,
   bloom = 1,
-  suspendWhenOffscreen = false,
+  suspendWhenOffscreen = true,
   timeScale = 0.5
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -62,7 +62,9 @@ const Prism: React.FC<PrismProps> = ({
     const HOVSTR = Math.max(0, hoverStrength || 1);
     const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    // Cap DPR to 1.0 on mobile/small screens and 1.25 on desktop to drastically reduce GPU fragment fill rate
+    const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 768;
+    const dpr = isSmallScreen ? 1.0 : Math.min(1.25, window.devicePixelRatio || 1);
     const renderer = new Renderer({
       dpr,
       alpha: transparent,
@@ -401,10 +403,20 @@ const Prism: React.FC<PrismProps> = ({
       }
     };
 
+    const handleVisibility = () => {
+      if (document.hidden) {
+        stopRAF();
+      } else if (!suspendWhenOffscreen || (container as any)?.__isIntersecting) {
+        startRAF();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
     if (suspendWhenOffscreen) {
       const io = new IntersectionObserver(entries => {
         const vis = entries.some(e => e.isIntersecting);
-        if (vis) startRAF();
+        (container as any).__isIntersecting = vis;
+        if (vis && !document.hidden) startRAF();
         else stopRAF();
       });
       io.observe(container);
@@ -417,6 +429,7 @@ const Prism: React.FC<PrismProps> = ({
     return () => {
       stopRAF();
       ro.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibility);
       if (animationType === 'hover') {
         if (onPointerMove) window.removeEventListener('pointermove', onPointerMove);
         window.removeEventListener('mouseleave', onLeave);

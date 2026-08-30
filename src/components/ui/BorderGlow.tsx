@@ -130,19 +130,32 @@ export const BorderGlow: React.FC<BorderGlowProps> = ({
     return degrees;
   }, [getCenterOfElement]);
 
+  const rafRef = useRef<number | null>(null);
+
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    // Touch devices don't have hover effects - avoid expensive calculations on mobile
+    if (e.pointerType === 'touch') return;
     const card = cardRef.current;
     if (!card) return;
 
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
 
-    const edge = getEdgeProximity(card, x, y);
-    const angle = getCursorAngle(card, x, y);
+    if (rafRef.current !== null) return;
 
-    card.style.setProperty('--edge-proximity', `${(edge * 100).toFixed(3)}`);
-    card.style.setProperty('--cursor-angle', `${angle.toFixed(3)}deg`);
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      const edge = getEdgeProximity(cardRef.current, x, y);
+      const angle = getCursorAngle(cardRef.current, x, y);
+
+      cardRef.current.style.setProperty('--edge-proximity', `${(edge * 100).toFixed(1)}`);
+      cardRef.current.style.setProperty('--cursor-angle', `${angle.toFixed(1)}deg`);
+    });
   }, [getEdgeProximity, getCursorAngle]);
 
   useEffect(() => {

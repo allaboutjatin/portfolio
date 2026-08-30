@@ -402,13 +402,16 @@ export const WarpText: React.FC<WarpTextProps> = ({
     const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, active: 0, activeTarget: 0 };
     const startTime = performance.now();
 
+    const isSmallDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || 'ontouchstart' in window);
+    const getDpr = () => (isSmallDevice ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.25));
+
     try {
       renderer = new Renderer({
         webgl: 2,
         alpha: true,
         premultipliedAlpha: false,
-        antialias: true,
-        dpr: Math.min(window.devicePixelRatio || 1, 2)
+        antialias: !isSmallDevice,
+        dpr: getDpr()
       });
       gl = renderer.gl;
     } catch (error) {
@@ -477,7 +480,7 @@ export const WarpText: React.FC<WarpTextProps> = ({
       const effectiveW = rect.width > 0 ? rect.width : container.clientWidth || window.innerWidth;
       const effectiveH = rect.height > 0 ? rect.height : container.clientHeight || 240;
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = getDpr();
       const textCanvas = buildTextCanvas({
         container,
         width: effectiveW,
@@ -496,7 +499,7 @@ export const WarpText: React.FC<WarpTextProps> = ({
       const effectiveW = rect.width > 0 ? rect.width : container.clientWidth || window.innerWidth;
       const effectiveH = rect.height > 0 ? rect.height : container.clientHeight || 240;
 
-      renderer.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      renderer.dpr = getDpr();
       renderer.setSize(effectiveW, effectiveH);
       program.uniforms.uResolution.value[0] = gl.drawingBufferWidth;
       program.uniforms.uResolution.value[1] = gl.drawingBufferHeight;

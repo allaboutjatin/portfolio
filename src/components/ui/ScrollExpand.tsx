@@ -133,7 +133,6 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
       const titleScale = (1 + 0.06 * out) * (0.92 + 0.08 * titleIntro);
       titleRef.current.style.opacity = `${titleOpacity}`;
       titleRef.current.style.transform = `translate3d(0, ${titleY}px, 0) scale(${titleScale})`;
-      titleRef.current.style.filter = titleIntro < 0.99 ? `blur(${(1 - titleIntro) * 10}px)` : 'none';
       titleRef.current.style.pointerEvents = out > 0.6 || titleIntro < 0.5 ? 'none' : 'auto';
     }
 
@@ -142,7 +141,6 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
       const hintIntro = Math.max(0, (intro - 0.4) / 0.6);
       hintRef.current.style.opacity = `${(1 - gone) * hintIntro}`;
       hintRef.current.style.transform = `translate3d(0, ${8 * gone + (1 - hintIntro) * 10}px, 0)`;
-      hintRef.current.style.filter = hintIntro < 0.99 ? `blur(${(1 - hintIntro) * 6}px)` : 'none';
       hintRef.current.style.pointerEvents = gone > 0.5 || hintIntro < 0.5 ? 'none' : 'auto';
     }
 

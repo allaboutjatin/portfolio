@@ -156,9 +156,9 @@ export default function App() {
           {/* Dynamic Parallax Background VFX Video & 3D Interactive Canvas */}
           <BackgroundVfxCanvas />
 
-          {/* Right-Side Volumetric Light Rays (fades in as Hero Prism scrolls away) */}
+          {/* Right-Side Volumetric Light Rays (fades in as Hero Prism scrolls away - Desktop only for performance) */}
           <div
-            className="fixed top-0 right-0 w-full sm:w-[650px] md:w-[800px] lg:w-[950px] h-screen pointer-events-none z-20 mix-blend-screen transition-opacity duration-500 ease-out"
+            className="hidden md:block fixed top-0 right-0 w-full sm:w-[650px] md:w-[800px] lg:w-[950px] h-screen pointer-events-none z-20 mix-blend-screen transition-opacity duration-500 ease-out"
             style={{
               opacity: raysOpacity
             }}

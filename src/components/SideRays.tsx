@@ -60,11 +60,17 @@ const SideRays: React.FC<SideRaysProps> = ({
       cleanupFunctionRef.current = null;
     }
 
+    // Skip WebGL on small mobile screens (<768px) to protect mobile GPU/battery
+    const isSmallScreen = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (isSmallScreen) {
+      return;
+    }
+
     const initializeWebGL = () => {
       if (!containerRef.current) return;
 
       const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio || 1, 2),
+        dpr: 1.0,
         alpha: true,
         premultipliedAlpha: false
       });
@@ -192,6 +198,13 @@ void main() {
 
       const loop = (t: number) => {
         if (!rendererRef.current || !uniformsRef.current || !meshRef.current) return;
+        
+        // Skip rendering if document is hidden or if rays are effectively invisible
+        if (document.hidden || opacity <= 0.01) {
+          animationIdRef.current = requestAnimationFrame(loop);
+          return;
+        }
+
         uniformsRef.current.iTime.value = t * 0.001;
         try {
           rendererRef.current.render({ scene: meshRef.current });

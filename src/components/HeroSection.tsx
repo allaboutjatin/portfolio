@@ -76,6 +76,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         scrollDistance={isMobile ? 1.0 : 1.3}
         holdDistance={0.2}
         overlayScrim={0.55}
+        topBanner={
+          <div className="flex items-center justify-center px-3 pt-1 sm:pt-3 w-full text-center pointer-events-none">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 border border-white/20 backdrop-blur-md shadow-2xl max-w-[95vw] sm:max-w-2xl">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <p className="font-mono-code text-[10px] xs:text-[11px] sm:text-xs text-white tracking-wide font-medium leading-tight drop-shadow-md">
+                Open on a desktop for optimum performance and experience — not built for mobile phones or low-end machines.
+              </p>
+            </div>
+          </div>
+        }
         title={
           <div className="flex flex-col items-center justify-center select-none px-3 w-full max-w-xl">
             <div className="inline-flex items-center gap-1.5 sm:gap-2 mb-1.5 px-3 sm:px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[9px] sm:text-[11px] font-mono-code text-slate-300 backdrop-blur-md">
@@ -101,18 +111,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     fontFamily: "'Instrument Serif', serif"
                   }
                 ]}
-                particleSize={isMobile ? 1.9 : 2.1}
-                density={isMobile ? 4.5 : 3.2}
+                particleSize={isMobile ? 2.3 : 2.4}
+                density={isMobile ? 2.5 : 2.8}
                 color="#ffffff"
                 highlightColor="#ffffff"
-                scatter={isMobile ? 24 : 40}
-                gatherDuration={isMobile ? 1.1 : 1.3}
+                scatter={isMobile ? 24 : 35}
+                gatherDuration={isMobile ? 1.2 : 1.3}
                 enableGather={true}
                 trigger="mount"
-                pointerRepel={isMobile ? 30 : 50}
-                repelRadius={isMobile ? 80 : 120}
-                idleDrift={isMobile ? 0.3 : 0.5}
-                fontSize={isMobile ? "clamp(2.6rem, 10.5vw, 3.8rem)" : "clamp(2.4rem, 4.8vw, 4.2rem)"}
+                pointerRepel={isMobile ? 40 : 55}
+                repelRadius={isMobile ? 100 : 130}
+                idleDrift={isMobile ? 0.35 : 0.5}
+                fontSize={isMobile ? "clamp(3.0rem, 12vw, 4.4rem)" : "clamp(3.2rem, 5.8vw, 5.2rem)"}
                 glow={!isMobile}
                 className="w-full h-full"
               />
@@ -120,11 +130,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         }
         scrollHint={
-          <div className="flex flex-col items-center justify-center space-y-1 select-none pointer-events-none animate-bounce">
-            <span className="font-mono-code text-[10px] sm:text-xs font-semibold tracking-widest text-slate-300 uppercase">
+          <div className="flex flex-col items-center justify-center select-none pointer-events-none px-4 text-center animate-bounce">
+            <span className="font-mono-code text-[11px] sm:text-xs font-semibold tracking-widest text-white uppercase drop-shadow-sm mb-0.5">
               Scroll down to explore
             </span>
-            <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
+            <ChevronDown className="w-4 h-4 text-white drop-shadow-sm" />
           </div>
         }
       >
@@ -166,39 +176,82 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </LiquidButton>
           </div>
 
-          {/* Interactive WarpText Headline with WebGL Refraction and Previous Mixed Font Styling */}
-          <div className="w-full max-w-5xl h-[145px] sm:h-[190px] md:h-[230px] mx-auto flex items-center justify-center my-1 sm:my-2 pointer-events-auto">
+          {/* Interactive WarpText Headline with WebGL Refraction and Responsive Typography */}
+          <div className="w-full max-w-5xl h-[180px] xs:h-[195px] sm:h-[190px] md:h-[230px] mx-auto flex items-center justify-center my-1 sm:my-2 pointer-events-auto">
             <WarpText
-              parts={[
-                [
-                  {
-                    text: 'Creating ',
-                    fontWeight: 700,
-                    fontStyle: 'normal',
-                    fontFamily: "'Syne', 'Outfit', sans-serif",
-                    color: '#ffffff',
-                    fontSizeMultiplier: 1.0
-                  },
-                  {
-                    text: 'photoreal 3D cinematics',
-                    fontWeight: 400,
-                    fontStyle: 'italic',
-                    fontFamily: "'Instrument Serif', serif",
-                    color: '#b5b5b5',
-                    fontSizeMultiplier: 1.08
-                  }
-                ],
-                [
-                  {
-                    text: 'and high-end CGI.',
-                    fontWeight: 700,
-                    fontStyle: 'normal',
-                    fontFamily: "'Syne', 'Outfit', sans-serif",
-                    color: '#ffffff',
-                    fontSizeMultiplier: 1.0
-                  }
-                ]
-              ]}
+              parts={
+                isMobile
+                  ? [
+                      [
+                        {
+                          text: 'Creating ',
+                          fontWeight: 700,
+                          fontStyle: 'normal',
+                          fontFamily: "'Syne', 'Outfit', sans-serif",
+                          color: '#ffffff',
+                          fontSizeMultiplier: 1.0
+                        },
+                        {
+                          text: 'photoreal',
+                          fontWeight: 400,
+                          fontStyle: 'italic',
+                          fontFamily: "'Instrument Serif', serif",
+                          color: '#e4e4e7',
+                          fontSizeMultiplier: 1.15
+                        }
+                      ],
+                      [
+                        {
+                          text: '3D cinematics',
+                          fontWeight: 400,
+                          fontStyle: 'italic',
+                          fontFamily: "'Instrument Serif', serif",
+                          color: '#e4e4e7',
+                          fontSizeMultiplier: 1.15
+                        }
+                      ],
+                      [
+                        {
+                          text: 'and high-end CGI.',
+                          fontWeight: 700,
+                          fontStyle: 'normal',
+                          fontFamily: "'Syne', 'Outfit', sans-serif",
+                          color: '#ffffff',
+                          fontSizeMultiplier: 1.0
+                        }
+                      ]
+                    ]
+                  : [
+                      [
+                        {
+                          text: 'Creating ',
+                          fontWeight: 700,
+                          fontStyle: 'normal',
+                          fontFamily: "'Syne', 'Outfit', sans-serif",
+                          color: '#ffffff',
+                          fontSizeMultiplier: 1.0
+                        },
+                        {
+                          text: 'photoreal 3D cinematics',
+                          fontWeight: 400,
+                          fontStyle: 'italic',
+                          fontFamily: "'Instrument Serif', serif",
+                          color: '#b5b5b5',
+                          fontSizeMultiplier: 1.08
+                        }
+                      ],
+                      [
+                        {
+                          text: 'and high-end CGI.',
+                          fontWeight: 700,
+                          fontStyle: 'normal',
+                          fontFamily: "'Syne', 'Outfit', sans-serif",
+                          color: '#ffffff',
+                          fontSizeMultiplier: 1.0
+                        }
+                      ]
+                    ]
+              }
               color="#ffffff"
               warpStrength={0.08}
               warpScale={1.7}
@@ -207,9 +260,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               pointerStrength={0.38}
               refraction={0.018}
               ripple={true}
-              fontSize={isMobile ? "clamp(1.95rem, 8vw, 2.85rem)" : "clamp(2.3rem, 4.8vw, 3.8rem)"}
+              fontSize={isMobile ? "clamp(2.6rem, 11vw, 3.6rem)" : "clamp(2.3rem, 4.8vw, 3.8rem)"}
               letterSpacing="-0.03em"
-              lineHeight={isMobile ? 1.14 : 1.18}
+              lineHeight={isMobile ? 1.12 : 1.18}
               style={{ height: '100%', width: '100%' }}
             />
           </div>

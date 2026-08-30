@@ -15,6 +15,7 @@ export interface ScrollExpandProps extends Omit<React.HTMLAttributes<HTMLDivElem
   poster?: string;
   alt?: string;
   title?: ReactNode;
+  topBanner?: ReactNode;
   scrollHint?: ReactNode;
   startWidth?: number;
   startHeight?: number;
@@ -40,6 +41,7 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
   poster = '',
   alt = '',
   title = '',
+  topBanner = '',
   scrollHint = '',
   startWidth = 42,
   startHeight = 58,
@@ -67,6 +69,7 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const scrimRef = useRef<HTMLDivElement | null>(null);
   const hintRef = useRef<HTMLDivElement | null>(null);
+  const topBannerRef = useRef<HTMLDivElement | null>(null);
   const introProgressRef = useRef<number>(enableIntroAnimation ? 0 : 1);
 
   const propsRef = useRef({
@@ -134,6 +137,14 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
       titleRef.current.style.opacity = `${titleOpacity}`;
       titleRef.current.style.transform = `translate3d(0, ${titleY}px, 0) scale(${titleScale})`;
       titleRef.current.style.pointerEvents = out > 0.6 || titleIntro < 0.5 ? 'none' : 'auto';
+    }
+
+    if (topBannerRef.current) {
+      const gone = smoothstep(0, 0.12, p);
+      const bannerIntro = Math.max(0, (intro - 0.2) / 0.8);
+      topBannerRef.current.style.opacity = `${(1 - gone) * bannerIntro}`;
+      topBannerRef.current.style.transform = `translate3d(0, ${-8 * gone + (1 - bannerIntro) * -10}px, 0)`;
+      topBannerRef.current.style.pointerEvents = gone > 0.5 || bannerIntro < 0.5 ? 'none' : 'auto';
     }
 
     if (hintRef.current) {
@@ -319,6 +330,11 @@ export const ScrollExpand: React.FC<ScrollExpandProps> = ({
               </div>
             ) : null}
           </div>
+          {topBanner ? (
+            <div ref={topBannerRef} className="scroll-expand__top-banner">
+              {topBanner}
+            </div>
+          ) : null}
           {title ? (
             <div ref={titleRef} className="scroll-expand__title">
               {title}

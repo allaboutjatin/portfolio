@@ -114,3 +114,17 @@
   pointer-events: none;
   will-change: opacity, transform;
 }
+
+.scroll-expand__top-banner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  pointer-events: none;
+  z-index: 20;
+  will-change: opacity, transform;
+}

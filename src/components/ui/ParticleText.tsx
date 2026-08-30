@@ -345,7 +345,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       const imageData = offCtx.getImageData(0, 0, offscreen.width, offscreen.height);
       const rawPoints: { x: number; y: number; alpha: number }[] = [];
       const baseStep = Math.max(2, Math.floor(density));
-      const step = isMobileDevice ? Math.max(4, baseStep + 1) : baseStep;
+      const step = isMobileDevice ? Math.max(2, baseStep) : baseStep;
 
       let minX = offscreen.width;
       let maxX = 0;
@@ -355,7 +355,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
       for (let y = 0; y < offscreen.height; y += step) {
         for (let x = 0; x < offscreen.width; x += step) {
           const alpha = imageData.data[(y * offscreen.width + x) * 4 + 3];
-          if (alpha > 45) {
+          if (alpha > 35) {
             rawPoints.push({ x, y, alpha: alpha / 255 });
             if (x < minX) minX = x;
             if (x > maxX) maxX = x;
@@ -380,7 +380,7 @@ export const ParticleText: React.FC<ParticleTextProps> = ({
         alpha: pt.alpha
       }));
 
-      const maxParticles = isMobileDevice ? 320 : Math.max(900, Math.min(4000, Math.floor((width * height) / 80)));
+      const maxParticles = isMobileDevice ? 950 : Math.max(1200, Math.min(4500, Math.floor((width * height) / 70)));
       const stride = Math.max(1, Math.ceil(targets.length / maxParticles));
       const selected = targets.filter((_, index) => index % stride === 0);
 
